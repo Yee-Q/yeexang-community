@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.yeexang.community.dao.UserDao">
+
+    <select id="selectUserByMail" resultType="User">
+        SELECT * FROM user WHERE mail = #{mail}
+    </select>
+
+    <select id="selectUserByName" resultType="User">
+        SELECT * FROM user WHERE name = #{name}
+    </select>
+
+    <select id="selectUserAccountByUserId" resultType="UserAccount">
+        SELECT * FROM user_account WHERE user_id = #{userId}
+    </select>
+
+    <insert id="createUser" parameterType="User">
+        INSERT INTO user(name, mail, password, gmt_create, gmt_modified) VALUES(#{name}, #{mail}, #{password}, #{gmtCreate}, #{gmtModified})
+    </insert>
+
+    <insert id="createUserAccount" parameterType="UserAccount">
+        INSERT INTO user_account(user_id, level, vip, exp) VALUES(#{userId}, #{level}, #{vip}, #{exp})
+    </insert>
+
+    <insert id="createUserInfo" parameterType="UserInfo">
+        INSERT INTP user_info(user_id) VALUES({#{userId})
+    </insert>
+
+</mapper>

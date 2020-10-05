@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${sectionName}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="yeexang">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/global.css">
+</head>
+<body>
+
+<!-- 导航栏 -->
+<div th:insert="~{/common/header :: nav}"></div>
+
+<div class="layui-container fly-marginTop">
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="layui-tab layui-tab-brief" lay-filter="user">
+            <ul class="layui-tab-title">
+                <li th:class="${section=='login'?'layui-this':''}">
+                    <a href="/sso/login" id="login-btn">登入</a>
+                </li>
+                <li th:class="${section=='register'?'layui-this':''}">
+                    <a href="/sso/register" id="register-btn">注册</a>
+                </li>
+            </ul>
+            <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+                <!-- 登入 -->
+                <div class="layui-tab-item layui-show" th:if="${section=='login'}">
+                    <div class="layui-form layui-form-pane">
+                        <form>
+                            <div class="layui-form-item">
+                                <label for="login_email" class="layui-form-label">邮箱</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="login_email" name="email" required lay-verify="required|email" autocomplete="off" class="layui-input" />
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="login_pass" class="layui-form-label">密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" id="login_pass" name="pass" required lay-verify="required|pass" autocomplete="off" class="layui-input" />
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div th:insert="~{/common/other :: vaptcha}"></div>
+                            </div>
+                            <div class="layui-form-item">
+                                <button class="layui-btn" lay-filter="register-login-submit" lay-submit>立即登入</button>
+                                <span style="padding-left:20px;">
+                                    <a href="forget.html">忘记密码？</a>
+                                </span>
+                            </div>
+                            <div class="layui-form-item fly-form-app">
+                                <span>或者使用社交账号登入</span>
+                                <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})"
+                                   class="iconfont icon-qq" title="QQ登入"></a>
+                                <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})"
+                                   class="iconfont icon-weibo" title="微博登入"></a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- 注册 -->
+                <div class="layui-tab-item layui-show" th:if="${section=='register'}">
+                    <div class="layui-form layui-form-pane">
+                        <form>
+                            <div class="layui-form-item">
+                                <label for="register_email" class="layui-form-label">邮箱</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="register_email" name="email" required lay-verify="email" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">将会成为您唯一的登入名</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="register_username" class="layui-form-label">昵称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="register_username" name="username" required lay-verify="required|username" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="register_pass" class="layui-form-label">密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" id="register_pass" name="pass" required lay-verify="required|pass" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">6到12个字符</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="register_repass" class="layui-form-label">确认密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" id="register_repass" name="repass" required lay-verify="required|repass" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div th:insert="~{/common/other :: vaptcha}"></div>
+                            </div>
+                            <div class="layui-form-item">
+                                <button class="layui-btn" lay-filter="register-login-submit" lay-submit>立即注册</button>
+                            </div>
+                            <div class="layui-form-item fly-form-app">
+                                <span>或者直接使用社交账号快捷注册</span>
+                                <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
+                                <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="fly-footer">
+    <p>
+        <a href="http://fly.layui.com/" target="_blank">Fly社区</a>
+        2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a>
+    </p>
+    <p>
+        <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+        <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+        <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+    </p>
+</div>
+
+<script src="/layui/layui.js"></script>
+<script src="/js/jquery/jquery-3.4.1.min.js"></script>
+<script src="https://v.vaptcha.com/v3.js"></script>
+<script>
+
+    /* 场景值 */
+    var scene = 0;
+    /* 是否完成验证 */
+    var isVerify = 0;
+
+    /* layui */
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        // 自定义表单校验规则
+        form.verify({
+            // 用户名校验
+            username: function (value) {
+                if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+                    return '用户名不能有特殊字符';
+                }
+                if (/(^\_)|(\__)|(\_+$)/.test(value)) {
+                    return '用户名首尾不能出现下划线\'_\'';
+                }
+                if (/^\d+\d+\d$/.test(value)) {
+                    return '用户名不能全为数字';
+                }
+            },
+            // 密码校验
+            pass: function (value) {
+                if (new RegExp("/^[\S]{6,12}$/").test(value)) {
+                    return '密码必须6到12位，且不能出现空格';
+                }
+            },
+            // 确认密码校验
+            repass: function (value) {
+                if (value !== $('#register_pass').val()) {
+                    return '密码必须保持一致';
+                }
+            }
+        });
+        // 监听注册或登入提交
+        form.on('submit(register-login-submit)', function () {
+            if (isVerify === 0) {
+                layer.msg('请先完成手势验证');
+            } else {
+                var data = {};
+                if (scene === 1) {
+                    data['mail'] = $('#register_email').val();
+                    data['password'] = $('#register_pass').val();
+                }
+                if (scene === 2) {
+                    data['mail'] = $('#register_email').val();
+                    data['username'] = $('#register_username').val();
+                    data['password'] = $('#register_pass').val();
+                }
+                $.ajax({
+                    type: "post",
+                    url: "/sso/{action}",
+                    async: true,
+                    contentType: 'application/json',
+                    dataType: 'JSON',
+                    data: JSON.stringify(data), //将对象转为json字符串
+                    success: function(res) {
+                        if (res.code === 2000) {
+                            $(location).attr('href', '/');
+                        } else {
+                            layer.open({
+                                type: 1
+                                ,offset: type
+                                ,content: '<div style="padding: 20px 100px;">'+ res.message +'</div>'
+                                ,btn: '关闭'
+                                ,btnAlign: 'c' //按钮居中
+                                ,shade: 0 //不显示遮罩
+                                ,yes: function(){
+                                    layer.closeAll();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            return false; // 阻止表单跳转，如果需要表单跳转，去掉这段即可
+        });
+    });
+
+    /* vaptcha 验证 */
+    vaptcha({
+        vid: '[[${vaptchaVid}]]', // 验证单元id
+        type: "click", // 显示类型 点击式
+        scene: scene, // 场景值，默认0
+        container: "#vaptchaContainer", // 容器，可为Element 或者 selector
+        offline_server: "/validateOffline", //离线模式服务端地址，若尚未配置离线模式，请填写任意地址即可
+    }).then(function (vaptchaObj) {
+        // 调用验证实例 vpObj 的 render 方法加载验证按钮
+        vaptchaObj.render();
+        // 获取token
+        vaptchaObj.listen("pass", function () {
+            var data = {
+                //表单数据
+                token: vaptchaObj.getToken(),
+                scene: scene
+            };
+            // 二次验证
+            $.post("/validate", data, function (res) {
+                if (res.code !== 200) {
+                    swal({
+                        title: "" + res.message,
+                        text: "您未能通过我们的第二次智能检测，请稍后再试或联系管理员",
+                        icon: "error",
+                        button: "确认",
+                    });
+                } else {
+                    isVerify = 1;
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        /* 初始化场景值 */
+        if ('[[${vaptchaVid}]]' === 'login') {
+            scene = 1;
+        } else if ('[[${vaptchaVid}]]' === 'register') {
+            scene = 2;
+        }
+        /* 点击登入，改变场景值 */
+        $('#login-btn').click(function () {
+            scene = 1;
+        });
+        /* 点击注册，改变场景值 */
+        $('#register-btn').click(function () {
+            scene = 2;
+        });
+    });
+
+</script>
+
+</body>
+</html>
