@@ -19,11 +19,11 @@
     </insert>
 
     <insert id="createUserAccount" parameterType="UserAccount">
-        INSERT INTO user_account(user_id, level, vip, exp) VALUES(#{userId}, #{level}, #{vip}, #{exp})
+        INSERT INTO user_account(user_id, level, vip, userExp) VALUES(#{userId}, #{level}, #{vip}, #{user_exp})
     </insert>
 
     <insert id="createUserInfo" parameterType="UserInfo">
-        INSERT INTP user_info(user_id) VALUES({#{userId})
+        INSERT INTO user_info(user_id) VALUES(#{userId})
     </insert>
 
 </mapper>

@@ -3,7 +3,6 @@ package top.yeexang.community.dto;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import top.yeexang.community.enums.ResponseCodeEnum;
-import top.yeexang.community.exception.CustomizeException;
 
 /**
  * @author yeeq

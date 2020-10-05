@@ -2,10 +2,9 @@ package top.yeexang.community.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.yeexang.community.dao.UserDao;
 import top.yeexang.community.dto.ResultDTO;
@@ -14,7 +13,6 @@ import top.yeexang.community.entity.User;
 import top.yeexang.community.entity.UserAccount;
 import top.yeexang.community.entity.UserInfo;
 import top.yeexang.community.enums.ResponseCodeEnum;
-import top.yeexang.community.exception.CustomizeException;
 import top.yeexang.community.service.UserSev;
 import top.yeexang.community.utils.JwtUtil;
 
@@ -25,6 +23,7 @@ import java.util.Map;
  * @author yeeq
  * @date 2020/10/3
  */
+@Service
 @Transactional
 public class UserSevImpl implements UserSev {
 
@@ -100,7 +99,7 @@ public class UserSevImpl implements UserSev {
         userAccount.setUserId(user.getId());
         userAccount.setLevel(1);
         userAccount.setVip(false);
-        userAccount.setExp(0);
+        userAccount.setUserExp(0);
     }
 
     /**
@@ -124,7 +123,7 @@ public class UserSevImpl implements UserSev {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
         UserAccount userAccount = userDao.selectUserAccountByUserId(user.getId());
-        userDTO.setLevel(userAccount.getLevel()).setVip(userAccount.getVip()).setExp(userAccount.getExp());
+        userDTO.setLevel(userAccount.getLevel()).setVip(userAccount.getVip()).setUserExp(userAccount.getUserExp());
         return userDTO;
     }
 

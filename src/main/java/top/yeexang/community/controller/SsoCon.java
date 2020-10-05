@@ -59,7 +59,7 @@ public class SsoCon {
         }
         model.addAttribute("vaptchaVid", vaptchaVid);
         if (TO_LOGIN.equals(action)) {
-            model.addAttribute("scene", "login");
+            model.addAttribute("section", "login");
             model.addAttribute("sectionName", "登入");
         } else if (TO_REGISTER.equals(action)) {
             model.addAttribute("section", "register");
@@ -84,15 +84,15 @@ public class SsoCon {
         ResultDTO<?> resultDTO;
         // 登入
         if (TO_LOGIN.equals(action)) {
-            String email = map.get("email").toString();
-            String pass = map.get("pass").toString();
-            resultDTO = userSev.login(email, pass);
+            String mail = map.get("mail").toString();
+            String password = map.get("password").toString();
+            resultDTO = userSev.login(mail, password);
         } else if (TO_REGISTER.equals(action)) {
             // 注册
-            String email = map.get("email").toString();
-            String username = map.get("username").toString();
-            String pass = map.get("pass").toString();
-            resultDTO = userSev.register(email, username, pass);
+            String mail = map.get("mail").toString();
+            String name = map.get("name").toString();
+            String password = map.get("password").toString();
+            resultDTO = userSev.register(mail, name, password);
         } else {
             resultDTO = ResultDTO.errorOf();
         }

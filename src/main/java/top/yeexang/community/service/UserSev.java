@@ -1,13 +1,11 @@
 package top.yeexang.community.service;
 
-import org.springframework.stereotype.Service;
 import top.yeexang.community.dto.ResultDTO;
 
 /**
  * @author yeeq
  * @date 2020/10/3
  */
-@Service
 public interface UserSev {
 
     /**

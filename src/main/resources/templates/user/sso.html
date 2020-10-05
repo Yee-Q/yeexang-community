@@ -125,17 +125,19 @@
 <script src="/layui/layui.js"></script>
 <script src="/js/jquery/jquery-3.4.1.min.js"></script>
 <script src="https://v.vaptcha.com/v3.js"></script>
-<script>
+<script th:inline="javascript">
 
     /* 场景值 */
     var scene = 0;
     /* 是否完成验证 */
     var isVerify = 0;
+    var form;
+    var layer;
 
     /* layui */
     layui.use(['form', 'layer'], function () {
-        var form = layui.form;
-        var layer = layui.layer;
+        form = layui.form;
+        layer = layui.layer;
         // 自定义表单校验规则
         form.verify({
             // 用户名校验
@@ -168,34 +170,48 @@
             if (isVerify === 0) {
                 layer.msg('请先完成手势验证');
             } else {
-                var data = {};
+                var data;
+                var url;
                 if (scene === 1) {
-                    data['mail'] = $('#register_email').val();
-                    data['password'] = $('#register_pass').val();
+                    data = {
+                        mail: $('#login_email').val(),
+                        password: $('#login_pass').val()
+                    };
+                    url = "/sso/login";
                 }
                 if (scene === 2) {
-                    data['mail'] = $('#register_email').val();
-                    data['username'] = $('#register_username').val();
-                    data['password'] = $('#register_pass').val();
+                    data = {
+                        mail: $('#register_email').val(),
+                        name: $('#register_username').val(),
+                        password: $('#register_pass').val()
+                    };
+                    url = "/sso/register";
                 }
+                console.log(data);
                 $.ajax({
                     type: "post",
-                    url: "/sso/{action}",
+                    url: url,
                     async: true,
                     contentType: 'application/json',
                     dataType: 'JSON',
                     data: JSON.stringify(data), //将对象转为json字符串
                     success: function(res) {
                         if (res.code === 2000) {
-                            $(location).attr('href', '/');
+                            layer.open({
+                                type: 1
+                                ,content: '<div style="padding: 20px 100px;">'+ '操作成功！点击确定按钮返回首页' +'</div>'
+                                ,btn: '确定'
+                                ,btnAlign: 'c' //按钮居中
+                                ,yes: function(){
+                                    $(location).attr('href', '/');
+                                }
+                            });
                         } else {
                             layer.open({
                                 type: 1
-                                ,offset: type
                                 ,content: '<div style="padding: 20px 100px;">'+ res.message +'</div>'
                                 ,btn: '关闭'
                                 ,btnAlign: 'c' //按钮居中
-                                ,shade: 0 //不显示遮罩
                                 ,yes: function(){
                                     layer.closeAll();
                                 }
@@ -210,7 +226,7 @@
 
     /* vaptcha 验证 */
     vaptcha({
-        vid: '[[${vaptchaVid}]]', // 验证单元id
+        vid: [[${vaptchaVid}]], // 验证单元id
         type: "click", // 显示类型 点击式
         scene: scene, // 场景值，默认0
         container: "#vaptchaContainer", // 容器，可为Element 或者 selector
@@ -227,12 +243,17 @@
             };
             // 二次验证
             $.post("/validate", data, function (res) {
-                if (res.code !== 200) {
-                    swal({
-                        title: "" + res.message,
-                        text: "您未能通过我们的第二次智能检测，请稍后再试或联系管理员",
-                        icon: "error",
-                        button: "确认",
+                if (res.code !== 2000) {
+                    console.log(res.code);
+                    layer.open({
+                        type: 1
+                        ,content: '<div style="padding: 20px 100px;">'+ '您未能通过我们的第二次智能检测，请稍后再试或联系管理员' +'</div>'
+                        ,btn: '关闭'
+                        ,btnAlign: 'c' //按钮居中
+                        ,shade: 0 //不显示遮罩
+                        ,yes: function(){
+                            layer.closeAll();
+                        }
                     });
                 } else {
                     isVerify = 1;
@@ -243,9 +264,9 @@
 
     $(document).ready(function () {
         /* 初始化场景值 */
-        if ('[[${vaptchaVid}]]' === 'login') {
+        if ([[${section}]] === 'login') {
             scene = 1;
-        } else if ('[[${vaptchaVid}]]' === 'register') {
+        } else if ([[${section}]] === 'register') {
             scene = 2;
         }
         /* 点击登入，改变场景值 */

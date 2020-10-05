@@ -5,7 +5,6 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -16,19 +15,9 @@ import java.util.Map;
  */
 public class JwtUtil {
 
-    private static String SECRET;
+    private static final String SECRET = "n2B69tcq2Uqpaax0y7BTJTgOypSueYOS";
 
-    private static String EXPIRESTIME;
-
-    @Value("${site.jwt.secret}")
-    public void setsecret(String secret) {
-        JwtUtil.SECRET = secret;
-    }
-
-    @Value("${site.jwt.expiresTime}")
-    public void setexpirestime(String expirestime) {
-        JwtUtil.EXPIRESTIME = expirestime;
-    }
+    private static final Integer EXPIRESTIME = 3;
 
     /**
      * 生成 token
@@ -39,7 +28,7 @@ public class JwtUtil {
     public static String getToken(Map<String, String> map) {
 
         Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.DATE, Integer.parseInt(EXPIRESTIME));
+        instance.add(Calendar.DATE, EXPIRESTIME);
         JWTCreator.Builder builder = JWT.create();
         /* 创建 payload */
         map.forEach(builder::withClaim);

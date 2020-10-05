@@ -19,7 +19,8 @@ public enum ResponseCodeEnum {
     NAME_ALREADY_EXISTS(4002, "该昵称已被使用，换个昵称试试吧"),
     EMAIL_ERROR_OR_NOT_EXISTS(4003, "邮箱错误或不存在"),
     PASS_ERROR(4003, "密码错误"),
-    NO_LOGIN(4004, "请先登录");
+    NO_LOGIN(4004, "请先登录"),
+    ;
 
     private final Integer code;
     private final String message;
@@ -36,4 +37,4 @@ public enum ResponseCodeEnum {
     public String getMessage() {
         return message;
     }
-    }
+}

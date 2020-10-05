@@ -42,8 +42,8 @@
           <li class="layui-nav-item">
             <a class="fly-nav-avatar" href="javascript:">
               <cite class="layui-hide-xs" th:text="${loginUser.name}"></cite>
-              <i class="layui-badge fly-badge-vip layui-hide-xs" th:if="${loginUser.isVip==true}" th:text="VIP"></i>
-              <img th:src="${loginUser.avatarUrl}" alt="用户头像"/>
+              <i class="layui-badge fly-badge-vip layui-hide-xs" th:if="${loginUser.vip==true}" th:text="VIP"></i>
+              <img th:src="${loginUser.avatarUrl}"/>
             </a>
             <dl class="layui-nav-child">
               <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>

@@ -65,15 +65,16 @@ public class SessionInterceptor implements HandlerInterceptor {
                         try {
                             Map<String, Claim> map = JwtUtil.verifyToken(token);
                             userDTO = new UserDTO();
-                            userDTO.setId(map.get("id").asLong());
+                            userDTO.setId(Long.parseLong(map.get("id").asString()));
                             userDTO.setName(map.get("name").asString());
                             userDTO.setAvatarUrl(map.get("avatarUrl").asString());
-                            userDTO.setLevel(map.get("level").asInt());
-                            userDTO.setVip(map.get("vip").asBoolean());
-                            userDTO.setExp(map.get("exp").asInt());
+                            userDTO.setLevel(Integer.parseInt(map.get("level").asString()));
+                            userDTO.setVip(Boolean.parseBoolean(map.get("vip").asString()));
+                            userDTO.setUserExp(map.get("userExp").asInt());
                             request.setAttribute("loginUser", userDTO);
                             loginUserCache.putLoginUser(userDTO.getId(), System.currentTimeMillis());
                         } catch (Exception e) {
+                            e.printStackTrace();
                             throw new CustomizeException(ResponseCodeEnum.REQUEST_FAILED);
                         }
                     }
