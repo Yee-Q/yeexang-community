@@ -16,5 +16,5 @@ public class UserDTO {
     private String avatarUrl;
     private Integer level;
     private Boolean vip;
-    private Integer userExp;
+    private Integer experience;
 }

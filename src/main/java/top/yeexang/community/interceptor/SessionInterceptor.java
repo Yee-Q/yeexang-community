@@ -70,7 +70,7 @@ public class SessionInterceptor implements HandlerInterceptor {
                             userDTO.setAvatarUrl(map.get("avatarUrl").asString());
                             userDTO.setLevel(Integer.parseInt(map.get("level").asString()));
                             userDTO.setVip(Boolean.parseBoolean(map.get("vip").asString()));
-                            userDTO.setUserExp(map.get("userExp").asInt());
+                            userDTO.setExperience(Integer.parseInt(map.get("experience").asString()));
                             request.setAttribute("loginUser", userDTO);
                             loginUserCache.putLoginUser(userDTO.getId(), System.currentTimeMillis());
                         } catch (Exception e) {

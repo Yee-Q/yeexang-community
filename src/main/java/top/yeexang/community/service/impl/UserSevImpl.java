@@ -99,7 +99,7 @@ public class UserSevImpl implements UserSev {
         userAccount.setUserId(user.getId());
         userAccount.setLevel(1);
         userAccount.setVip(false);
-        userAccount.setUserExp(0);
+        userAccount.setExperience(0);
     }
 
     /**
@@ -123,7 +123,7 @@ public class UserSevImpl implements UserSev {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
         UserAccount userAccount = userDao.selectUserAccountByUserId(user.getId());
-        userDTO.setLevel(userAccount.getLevel()).setVip(userAccount.getVip()).setUserExp(userAccount.getUserExp());
+        userDTO.setLevel(userAccount.getLevel()).setVip(userAccount.getVip()).setExperience(userAccount.getExperience());
         return userDTO;
     }
 

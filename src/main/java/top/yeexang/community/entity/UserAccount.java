@@ -15,5 +15,5 @@ public class UserAccount {
     private Long userId;
     private Integer level;
     private Boolean vip;
-    private Integer userExp;
+    private Integer experience;
 }
