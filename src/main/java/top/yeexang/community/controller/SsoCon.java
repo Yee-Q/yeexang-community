@@ -1,19 +1,21 @@
 package top.yeexang.community.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import top.yeexang.community.annotation.UserLoginToken;
 import top.yeexang.community.dto.ResultDTO;
 import top.yeexang.community.dto.UserDTO;
 import top.yeexang.community.enums.ResponseCodeEnum;
-import top.yeexang.community.exception.CustomizeException;
 import top.yeexang.community.service.UserSev;
 import top.yeexang.community.utils.CookieUtil;
-import top.yeexang.community.utils.JwtUtil;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +29,6 @@ import java.util.Objects;
  */
 @Controller
 @Api(tags = "Sso服务接口")
-@RequestMapping("/sso")
 public class SsoCon {
 
     /** 表示跳转到登录页面 */
@@ -45,7 +46,7 @@ public class SsoCon {
     @Autowired
     private UserSev userSev;
 
-    @GetMapping("/{action}")
+    @GetMapping("/sso/{action}")
     @ApiOperation(value = "跳转到注册或登录页面")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "action", value = "登录或注册指令", dataType = "String", paramType = "path"),
@@ -70,7 +71,7 @@ public class SsoCon {
         return "user/sso";
     }
 
-    @PostMapping("/{action}")
+    @PostMapping("/sso/{action}")
     @ResponseBody
     @ApiOperation(value = "用户注册或登入")
     @ApiImplicitParams({
@@ -103,5 +104,15 @@ public class SsoCon {
             response.addCookie(cookie);
         }
         return resultDTO;
+    }
+
+    @UserLoginToken
+    @GetMapping("/logout")
+    @ApiOperation(value = "用户登出")
+    public String logout(HttpServletResponse response) {
+
+        Cookie cookie = CookieUtil.getCookie("token", null, 0, domain);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }

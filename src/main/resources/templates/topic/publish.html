@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>发表问题</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="yeexang">
+  <meta name="description" content="yeexang">
+  <link rel="stylesheet" href="/layui/css/layui.css">
+  <link rel="stylesheet" href="/css/global.css">
+</head>
+<body>
+
+<!-- 导航栏 -->
+<div th:insert="~{/common/header :: nav}"></div>
+
+<div class="layui-container fly-marginTop">
+  <div class="fly-panel" pad20 style="padding-top: 5px;">
+    <div class="layui-form layui-form-pane">
+      <div class="layui-tab layui-tab-brief" lay-filter="user">
+        <ul class="layui-tab-title">
+          <li class="layui-this">发表新帖</li>
+        </ul>
+        <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+          <div class="layui-tab-item layui-show">
+            <form>
+              <div class="layui-row layui-col-space15 layui-form-item">
+                <div class="layui-col-md3">
+                  <label class="layui-form-label">所在专栏</label>
+                  <div class="layui-input-block">
+                    <select name="categoryId" lay-verify="required">
+                      <option></option>
+                      <option th:each="category : ${categorieyDTOS}" th:value="${category.id}" th:text="${category.categoryName}"></option>
+                    </select>
+                  </div>
+                </div>
+                <div class="layui-col-md9">
+                  <label for="topic-title" class="layui-form-label">标题</label>
+                  <div class="layui-input-block">
+                    <input type="text" id="topic-title" name="title" required lay-verify="required" autocomplete="off" class="layui-input" />
+                  </div>
+                </div>
+              </div>
+              <div class="layui-form-item layui-form-text">
+                <div class="layui-input-block">
+                  <textarea id="topic-content" name="description" required lay-verify="content" class="layui-textarea fly-editor"></textarea>
+                </div>
+              </div>
+              <div id="topic-tag" class="layui-btn-container tag" lay-filter="topic-tag" lay-allowclose="true" lay-newTag="true">
+              </div>
+              <div class="layui-form-item">
+                <button class="layui-btn" lay-filter="publish-submit" lay-submit>立即发布</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fly-footer">
+  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
+  <p>
+    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+  </p>
+</div>
+
+<script src="/layui/layui.js"></script>
+
+<script th:inline="javascript">
+
+  layui.config({
+    base: '/layui/extends/tag/'
+  }).extend({ // 设定模块别名
+    tag: 'tag'
+  }).use(['form', 'layedit', 'tag', 'jquery', 'layer'], function () {
+    var tag = layui.tag;
+    var form = layui.form;
+    var layedit = layui.layedit;
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    layedit.set({
+      uploadImage: {
+        url: '' // 接口url
+        ,type: '' // 默认post
+      }
+    });
+    var topic = layedit.build('topic-content', {
+      height: 260
+    });
+    tag.on('add(topic-tag)', function (data) {
+      var bigElem = data.elem;
+      var tagElem = data.othis;
+      if ($(bigElem).children().length > 5) {
+        layer.msg('标签数量不能超过5个哦~');
+        return false;
+      }
+      if($(tagElem).text().length > 10) {
+        layer.msg('标签长度不能超过10个字符哦~');
+        return false;
+      }
+    });
+    form.on('submit(publish-submit)', function (data) {
+      var jsonData  = JSON.stringify(data.field);
+      var tag = '';
+      $('.tag-item').each(function () {
+        tag += $(this).text() + '';
+        tag = tag.substring(0, tag.length - 1);
+        tag += ','
+      })
+      tag = tag.substring(0, tag.length - 1);
+      jsonData = jsonData.substring(0, jsonData.length - 1);
+      jsonData += ',' + '"tag":"' + tag + '"}';
+      $.ajax({
+        type: "post",
+        url: "/publish/topic",
+        async: true,
+        contentType: 'application/json',
+        dataType: 'JSON',
+        data: jsonData,
+        success: function(res) {
+          if (res.code === 2000) {
+            layer.open({
+              type: 1
+              ,content: '<div style="padding: 20px 100px;">'+ '发表成功！点击确定按钮返回首页' +'</div>'
+              ,btn: '确定'
+              ,btnAlign: 'c' //按钮居中
+              ,yes: function(){
+                $(location).attr('href', '/');
+              }
+            });
+          } else {
+            layer.open({
+              type: 1
+              ,content: '<div style="padding: 20px 100px;">'+ '发生未知错误！请稍后再试' +'</div>'
+              ,btn: '关闭'
+              ,btnAlign: 'c' //按钮居中
+              ,yes: function(){
+                layer.closeAll();
+              }
+            });
+          }
+        }
+      });
+      return false;
+    });
+    form.verify({
+      content:function () {
+        return layedit.sync(topic);
+      }
+    });
+  });
+
+</script>
+
+</body>
+</html>

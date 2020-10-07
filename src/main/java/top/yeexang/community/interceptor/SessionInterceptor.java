@@ -1,9 +1,7 @@
 package top.yeexang.community.interceptor;
 
 import com.auth0.jwt.interfaces.Claim;
-import io.swagger.annotations.ApiOperation;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.method.HandlerMethod;
@@ -11,7 +9,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 import top.yeexang.community.annotation.UserLoginToken;
-import top.yeexang.community.cache.LoginUserCache;
 import top.yeexang.community.dto.UserDTO;
 import top.yeexang.community.enums.ResponseCodeEnum;
 import top.yeexang.community.exception.CustomizeException;
@@ -29,9 +26,6 @@ import java.util.Map;
  */
 @Service
 public class SessionInterceptor implements HandlerInterceptor {
-
-    @Autowired
-    private LoginUserCache loginUserCache;
 
     @Override
     public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
@@ -72,7 +66,6 @@ public class SessionInterceptor implements HandlerInterceptor {
                             userDTO.setVip(Boolean.parseBoolean(map.get("vip").asString()));
                             userDTO.setExperience(Integer.parseInt(map.get("experience").asString()));
                             request.setAttribute("loginUser", userDTO);
-                            loginUserCache.putLoginUser(userDTO.getId(), System.currentTimeMillis());
                         } catch (Exception e) {
                             e.printStackTrace();
                             throw new CustomizeException(ResponseCodeEnum.REQUEST_FAILED);

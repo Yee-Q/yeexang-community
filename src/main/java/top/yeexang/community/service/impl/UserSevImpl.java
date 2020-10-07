@@ -55,7 +55,7 @@ public class UserSevImpl implements UserSev {
         initUserInfo(dbUser, userInfo);
         userDao.createUserInfo(userInfo);
         // 封装数据传输对象并返回
-        return getResultDTO(dbUser);
+        return ResultDTO.successOf(getToken(dbUser));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class UserSevImpl implements UserSev {
         if (!user.getPassword().equals(pass)) {
             return ResultDTO.errorOf(ResponseCodeEnum.PASS_ERROR);
         }
-        return getResultDTO(user);
+        return ResultDTO.successOf(getToken(user));
     }
 
     /**
@@ -77,7 +77,7 @@ public class UserSevImpl implements UserSev {
      * @param user 用户
      * @return 数据传输对象
      */
-    public ResultDTO<?> getResultDTO(User user) {
+    public String getToken(User user) {
 
         UserDTO userDTO = getUserDTO(user);
         JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(userDTO));
@@ -85,7 +85,7 @@ public class UserSevImpl implements UserSev {
         for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
             map.put(entry.getKey(), entry.getValue().toString());
         }
-        return ResultDTO.successOf(JwtUtil.getToken(map));
+        return JwtUtil.getToken(map);
     }
 
     /**
