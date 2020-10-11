@@ -1,5 +1,4 @@
 top\yeexang\community\controller\SsoCon.class
-top\yeexang\community\cache\LoginUserCache.class
 top\yeexang\community\controller\ValidationCon.class
 top\yeexang\community\dao\UserDao.class
 top\yeexang\community\dao\CategoryDao.class
@@ -7,7 +6,6 @@ top\yeexang\community\dto\CategoryDTO.class
 top\yeexang\community\utils\JwtUtil.class
 top\yeexang\community\provider\VaptchaProvider.class
 top\yeexang\community\enums\ResponseCodeEnum.class
-top\yeexang\community\cache\MailCodeCache.class
 top\yeexang\community\service\TopicSev.class
 top\yeexang\community\entity\Category.class
 top\yeexang\community\utils\IpUtil.class

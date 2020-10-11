@@ -14,6 +14,14 @@ import top.yeexang.community.entity.UserInfo;
 public interface UserDao {
 
     /**
+     * 根据id查询用户信息
+     *
+     * @param id id
+     * @return 符合查询条件的用户信息
+     */
+    User selectUserById(@Param("id") Long id);
+
+    /**
      * 根据邮箱查询用户信息
      *
      * @param mail 邮箱

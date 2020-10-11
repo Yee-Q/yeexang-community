@@ -19,5 +19,5 @@ public class User {
     private String avatarUrl;
     private String mail;
     private String password;
-    private Integer role;
+    private Integer permission;
 }

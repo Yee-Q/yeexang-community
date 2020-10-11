@@ -26,13 +26,11 @@ G:\Java\yeexang\src\main\java\top\yeexang\community\entity\UserInfo.java
 G:\Java\yeexang\src\main\java\top\yeexang\community\runner\YeeXangApplicationRunner.java
 G:\Java\yeexang\src\main\java\top\yeexang\community\dto\CategoryDTO.java
 G:\Java\yeexang\src\main\java\top\yeexang\community\service\impl\TopicSevImpl.java
-G:\Java\yeexang\src\main\java\top\yeexang\community\cache\MailCodeCache.java
 G:\Java\yeexang\src\main\java\top\yeexang\community\CommunityApplication.java
 G:\Java\yeexang\src\main\java\top\yeexang\community\service\UserSev.java
 G:\Java\yeexang\src\main\java\top\yeexang\community\controller\ValidationCon.java
 G:\Java\yeexang\src\main\java\top\yeexang\community\service\impl\UserSevImpl.java
 G:\Java\yeexang\src\main\java\top\yeexang\community\exception\CustomizeException.java
-G:\Java\yeexang\src\main\java\top\yeexang\community\cache\LoginUserCache.java
 G:\Java\yeexang\src\main\java\top\yeexang\community\utils\OkHttpUtil.java
 G:\Java\yeexang\src\main\java\top\yeexang\community\exception\handler\CustomizeExceptionHandler.java
 G:\Java\yeexang\src\main\java\top\yeexang\community\dto\ResultDTO.java

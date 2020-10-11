@@ -1,6 +1,8 @@
 package top.yeexang.community.service;
 
 import top.yeexang.community.dto.ResultDTO;
+import top.yeexang.community.dto.UserDTO;
+import top.yeexang.community.entity.User;
 
 /**
  * @author yeeq
@@ -26,4 +28,12 @@ public interface UserSev {
      * @return {@link ResultDTO}
      */
     ResultDTO<?> login(String email, String pass);
+
+    /**
+     * 将用户实体转换为可返回的数据传输实体
+     *
+     * @param user 用户
+     * @return 数据传输对象
+     */
+    UserDTO getUserDTO(User user);
 }

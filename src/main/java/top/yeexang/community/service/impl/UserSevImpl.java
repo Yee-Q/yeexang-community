@@ -88,6 +88,16 @@ public class UserSevImpl implements UserSev {
         return JwtUtil.getToken(map);
     }
 
+    @Override
+    public UserDTO getUserDTO(User user) {
+
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(user, userDTO);
+        UserAccount userAccount = userDao.selectUserAccountByUserId(user.getId());
+        userDTO.setLevel(userAccount.getLevel()).setVip(userAccount.getVip()).setExperience(userAccount.getExperience());
+        return userDTO;
+    }
+
     /**
      * 初始化账户信息
      *
@@ -111,20 +121,4 @@ public class UserSevImpl implements UserSev {
     public void initUserInfo(User user, UserInfo userInfo) {
         userInfo.setUserId(user.getId());
     }
-
-    /**
-     * 将用户实体转换为可返回的数据传输实体
-     *
-     * @param user 用户
-     * @return 数据传输对象
-     */
-    public UserDTO getUserDTO(User user) {
-
-        UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(user, userDTO);
-        UserAccount userAccount = userDao.selectUserAccountByUserId(user.getId());
-        userDTO.setLevel(userAccount.getLevel()).setVip(userAccount.getVip()).setExperience(userAccount.getExperience());
-        return userDTO;
-    }
-
 }

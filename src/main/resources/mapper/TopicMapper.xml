@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.yeexang.community.dao.TopicDao">
+
+    <insert id="createTopic" parameterType="Topic">
+        INSERT INTO topic(title, description, gmt_create, gmt_modified, creator, comment_count, view_count, like_count, tag, status, gmt_latest_comment, category_id)
+        VALUES(#{title}, #{description}, #{gmtCreate}, #{gmtModified}, #{creator}, #{commentCount}, #{viewCount}, #{likeCount}, #{tag}, #{status}, #{gmtLatestComment}, #{categoryId})
+    </insert>
+
+    <select id="selectAllTopics" resultType="Topic">
+        SELECT * FROM topic
+    </select>
+
+</mapper>
