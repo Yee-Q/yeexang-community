@@ -6,7 +6,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import top.yeexang.community.cache.CategoryCache;
-import top.yeexang.community.dao.CategoryDao;
+import top.yeexang.community.cache.HotTopicCache;
 
 /**
  * @author yeeq
@@ -17,16 +17,24 @@ import top.yeexang.community.dao.CategoryDao;
 public class YeeXangApplicationRunner implements ApplicationRunner {
 
     @Autowired
-    private CategoryDao categoryDao;
+    private CategoryCache categoryCache;
 
     @Autowired
-    private CategoryCache categoryCache;
+    private HotTopicCache hotTopicCache;
 
     @Override
     public void run(ApplicationArguments args) {
+        // 加载专栏分类缓存
         if (!categoryCache.initCategoryCache()) {
-            log.warn("Category cache!initialization failded!Please check your configuration!");
+            log.warn("Category cache initialization failded!Please check your configuration!");
+        } else {
+            log.info("Category cache initalization succeeded!");
         }
-        log.info("Category cache initalization succeeded!");
+        // 加载热门帖子缓存
+        if (!hotTopicCache.initHotTopicCache()) {
+            log.warn("HotTopic cache initialization failded!Please check your configuration!");
+        } else {
+            log.info("HotTopic cache initalization succeeded!");
+        }
     }
 }

@@ -10,24 +10,13 @@
       <a class="fly-logo" href="/">
         <img src="/images/logo.png" alt="layui">
       </a>
-      <ul class="layui-nav fly-nav layui-hide-xs">
-        <li class="layui-nav-item layui-this">
-          <a href="/"><i class="iconfont icon-jiaoliu"></i>交流</a>
-        </li>
-        <li class="layui-nav-item">
-          <a href="#"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
-        </li>
-        <li class="layui-nav-item">
-          <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
-        </li>
-      </ul>
 
       <ul class="layui-nav fly-nav-user">
 
         <!-- 未登入的状态 -->
         <th:block th:if="${loginUser==null}">
           <li class="layui-nav-item">
-            <a class="iconfont icon-touxiang layui-hide-xs" href="../user/login.html"></a>
+            <a class="iconfont icon-touxiang layui-hide-xs" href="/sso/login"></a>
           </li>
           <li class="layui-nav-item">
             <a href="/sso/login">登入</a>
@@ -67,12 +56,7 @@
     <div class="layui-container">
       <ul class="layui-clear">
         <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>
-        <li><a href="jie/index.html">提问</a></li>
-        <li><a href="jie/index.html">分享<span class="layui-badge-dot"></span></a></li>
-        <li><a href="jie/index.html">讨论</a></li>
-        <li><a href="jie/index.html">建议</a></li>
-        <li><a href="jie/index.html">公告</a></li>
-        <li><a href="jie/index.html">动态</a></li>
+        <li th:each="category : ${categorieyDTOS}"><a href="javascript:void(0)" th:text="${category.categoryName}"></a></li>
         <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
 
         <!-- 用户登入后显示 -->

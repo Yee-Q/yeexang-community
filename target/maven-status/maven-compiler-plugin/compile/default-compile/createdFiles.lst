@@ -19,6 +19,7 @@ top\yeexang\community\config\WebConfig.class
 top\yeexang\community\dto\ResultDTO.class
 top\yeexang\community\controller\PublishCon.class
 top\yeexang\community\runner\YeeXangApplicationRunner.class
+top\yeexang\community\controller\TopicCon.class
 top\yeexang\community\CommunityApplication.class
 top\yeexang\community\config\SwaggerConfig.class
 top\yeexang\community\annotation\UserLoginToken.class
@@ -31,6 +32,7 @@ top\yeexang\community\service\UserSev.class
 top\yeexang\community\service\impl\TopicSevImpl.class
 top\yeexang\community\dao\TopicDao.class
 top\yeexang\community\dto\TopicDTO.class
+top\yeexang\community\cache\HotTopicCache.class
 top\yeexang\community\exception\CustomizeException.class
 top\yeexang\community\cache\CategoryCache.class
 top\yeexang\community\controller\IndexCon.class

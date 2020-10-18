@@ -25,4 +25,11 @@ public interface TopicDao {
      * @return 所有帖子信息列表
      */
     List<Topic> selectAllTopics();
+
+    /**
+     * 获取最近一次被回复的帖子列表
+     * @param size 需要的帖子数量
+     * @return 最近一次被回复的帖子列表
+     */
+    List<Topic> selectHotTopics(int size);
 }

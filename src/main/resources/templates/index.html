@@ -38,14 +38,9 @@
         
         <div class="fly-panel-title fly-filter">
           <a href="" class="layui-this">最新</a>
-          <span class="fly-mid"></span>
-          <a href="">最热</a>
-          <span class="fly-mid"></span>
-          <a href="">精华</a>
-          <span class="fly-mid"></span>
         </div>
 
-        <ul class="fly-list">
+        <!--<ul class="fly-list">
           <li th:each="topicDTO : ${topicDTOS}">
             <a href="javascript:void(0)" class="fly-avatar">
               <img th:src="${topicDTO.creator.avatarUrl}">
@@ -70,8 +65,7 @@
               <span class="layui-badge layui-bg-orange" th:if="${topicDTO.status == 2 || topicDTO.status == 3}">置顶</span>
             </div>
           </li>
-        </ul>
-        <div id="page-query"></div>
+        </ul>-->
       </div>
     </div>
 
@@ -242,10 +236,6 @@
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
         </dd>
 
-        <!-- 无数据时 -->
-        <!--
-        <div class="fly-none">没有相关数据</div>
-        -->
       </dl>
 
       <div class="fly-panel">
@@ -283,11 +273,10 @@
  
 <script src="/layui/layui.js"></script>
 <script th:inline="javascript">
-  layui.use(['carousel','element', 'laypage', 'jquery'], function(){
+  layui.use(['carousel','element', 'jquery'], function(){
 
     var carousel = layui.carousel;
     var element = layui.element;
-    var laypage = layui.laypage;
     var $ = layui.jquery;
     carousel.render({
       elem: '#carousel',
@@ -295,10 +284,6 @@
       arrow: 'always', // 始终显示箭头
       autoplay: true, // 开启自动切换
       interval: 3000  // 切换间隔
-    });
-    laypage.render({
-      elem: 'page-query',
-      count: [[${total}]]
     });
   });
 </script>

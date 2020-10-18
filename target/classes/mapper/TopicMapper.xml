@@ -11,4 +11,8 @@
         SELECT * FROM topic
     </select>
 
+    <select id="selectHotTopics" resultType="Topic">
+        SELECT * FROM topic ORDER BY gmt_latest_comment DESC LIMIT 0, 19
+    </select>
+
 </mapper>
