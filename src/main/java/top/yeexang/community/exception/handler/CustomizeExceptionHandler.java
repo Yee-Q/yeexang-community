@@ -1,5 +1,6 @@
 package top.yeexang.community.exception.handler;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CustomizeExceptionHandler implements HandlerExceptionResolver {
 
     @Override
-    public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
+    public ModelAndView resolveException(@NotNull HttpServletRequest httpServletRequest, @NotNull HttpServletResponse httpServletResponse, Object o, @NotNull Exception e) {
         ModelAndView mv = new ModelAndView("error");
         // 判断不同异常
         if (e instanceof CustomizeException) {

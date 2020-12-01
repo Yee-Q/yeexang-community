@@ -1,5 +1,8 @@
 package top.yeexang.community.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +29,10 @@ public class PublishCon {
     @UserLoginToken
     @ResponseBody
     @PostMapping("/publish/topic")
+    @ApiOperation(value = "发表帖子")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "topicDTO", value = "待发表的帖子信息", dataType = "TopicDTO", paramType = "body"),
+    })
     public ResultDTO<?> publishTopic(@RequestBody TopicDTO topicDTO, HttpServletRequest request) {
 
         UserDTO userDTO = (UserDTO) request.getAttribute("loginUser");

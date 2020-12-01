@@ -10,8 +10,6 @@ import top.yeexang.community.entity.Category;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 /**
@@ -26,8 +24,6 @@ public class CategoryCache {
     private CategoryDao categoryDao;
 
     private static final List<CategoryDTO> CATEGORYDTOS = new ArrayList<>();
-
-    private Lock lock = new ReentrantLock();
 
     /**
      * 获取分类缓存中的所有数据
@@ -47,22 +43,17 @@ public class CategoryCache {
      */
     public boolean initCategoryCache() {
 
-        lock.lock();
-        try {
-            List<Category> updateCategoryList = categoryDao.selectAllCategory();
-            if (updateCategoryList.isEmpty()) {
-                return false;
-            }
-            List<CategoryDTO> categoryDTOList = updateCategoryList.stream().map(category -> {
-                CategoryDTO categoryDTO = new CategoryDTO();
-                BeanUtils.copyProperties(category, categoryDTO);
-                return categoryDTO;
-            }).collect(Collectors.toList());
-            CATEGORYDTOS.clear();
-            CATEGORYDTOS.addAll(categoryDTOList);
-            return true;
-        } finally {
-            lock.unlock();
+        List<Category> updateCategoryList = categoryDao.selectAllCategory();
+        if (updateCategoryList.isEmpty()) {
+            return false;
         }
+        List<CategoryDTO> categoryDTOList = updateCategoryList.stream().map(category -> {
+            CategoryDTO categoryDTO = new CategoryDTO();
+            BeanUtils.copyProperties(category, categoryDTO);
+            return categoryDTO;
+        }).collect(Collectors.toList());
+        CATEGORYDTOS.clear();
+        CATEGORYDTOS.addAll(categoryDTOList);
+        return true;
     }
 }

@@ -1,7 +1,5 @@
 package top.yeexang.community.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +14,12 @@ import top.yeexang.community.entity.Category;
 import top.yeexang.community.entity.Topic;
 import top.yeexang.community.entity.User;
 import top.yeexang.community.enums.ResponseCodeEnum;
+import top.yeexang.community.exception.CustomizeException;
 import top.yeexang.community.service.TopicSev;
 import top.yeexang.community.service.UserSev;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author yeeq
@@ -56,14 +56,6 @@ public class TopicSevImpl implements TopicSev {
     }
 
     @Override
-    public PageInfo<Topic> showAllTopic(Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Topic> topicList = topicDao.selectAllTopics();
-        PageInfo<Topic> pageInfo = new PageInfo<>(topicList);
-        return pageInfo;
-    }
-
-    @Override
     public TopicDTO getTopicDTO(Topic topic) {
 
         TopicDTO topicDTO = new TopicDTO();
@@ -73,5 +65,32 @@ public class TopicSevImpl implements TopicSev {
         Category category = categoryDao.selectCategoryById(topic.getCategoryId());
         topicDTO.setCategory(category);
         return topicDTO;
+    }
+
+    @Override
+    public TopicDTO visitTopic(Long id) {
+        // 增加帖子阅读数
+        incView(id);
+        Topic topic = topicDao.selectTopicById(id);
+        if (topic == null) {
+            throw new CustomizeException(ResponseCodeEnum.TOPIC_NOT_EXISTS);
+        }
+        TopicDTO topicDTO = getTopicDTO(topic);
+        return topicDTO;
+    }
+
+    @Override
+    public List<TopicDTO> getNewTopicList() {
+        List<Topic> topics = topicDao.selectHotTopics(20);
+        List<TopicDTO> topicDTOList = topics.stream().map(this::getTopicDTO).collect(Collectors.toList());
+        return topicDTOList;
+    }
+
+    /**
+     * 增加帖子阅读数
+     * @param id 帖子id
+     */
+    public void incView(Long id) {
+        topicDao.updateTopicViewCountById(id);
     }
 }

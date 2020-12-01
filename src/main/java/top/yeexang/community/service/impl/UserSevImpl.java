@@ -71,6 +71,16 @@ public class UserSevImpl implements UserSev {
         return ResultDTO.successOf(getToken(user));
     }
 
+    @Override
+    public UserDTO getUserDTO(User user) {
+
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(user, userDTO);
+        UserAccount userAccount = userDao.selectUserAccountByUserId(user.getId());
+        userDTO.setLevel(userAccount.getLevel()).setVip(userAccount.getVip()).setExperience(userAccount.getExperience());
+        return userDTO;
+    }
+
     /**
      * 封装数据传输对象并返回
      *
@@ -86,16 +96,6 @@ public class UserSevImpl implements UserSev {
             map.put(entry.getKey(), entry.getValue().toString());
         }
         return JwtUtil.getToken(map);
-    }
-
-    @Override
-    public UserDTO getUserDTO(User user) {
-
-        UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(user, userDTO);
-        UserAccount userAccount = userDao.selectUserAccountByUserId(user.getId());
-        userDTO.setLevel(userAccount.getLevel()).setVip(userAccount.getVip()).setExperience(userAccount.getExperience());
-        return userDTO;
     }
 
     /**
@@ -121,4 +121,6 @@ public class UserSevImpl implements UserSev {
     public void initUserInfo(User user, UserInfo userInfo) {
         userInfo.setUserId(user.getId());
     }
+
+
 }

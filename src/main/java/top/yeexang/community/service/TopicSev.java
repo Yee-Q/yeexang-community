@@ -1,10 +1,11 @@
 package top.yeexang.community.service;
 
-import com.github.pagehelper.PageInfo;
 import top.yeexang.community.dto.ResultDTO;
 import top.yeexang.community.dto.TopicDTO;
 import top.yeexang.community.dto.UserDTO;
 import top.yeexang.community.entity.Topic;
+
+import java.util.List;
 
 /**
  * @author yeeq
@@ -22,18 +23,24 @@ public interface TopicSev {
     ResultDTO<?> publishTopic(TopicDTO topicDTO, UserDTO userDTO);
 
     /**
-     * 展示所有帖子
-     * @param pageNum 页码
-     * @param pageSize 页长
-     * @return 包含所有帖子的列表
-     */
-    PageInfo<Topic> showAllTopic(Integer pageNum, Integer pageSize);
-
-    /**
      * 将帖子实体转换为可返回的数据传输实体
      *
      * @param topic 帖子
      * @return 数据传输对象
      */
     TopicDTO getTopicDTO(Topic topic);
+
+    /**
+     * 通过 id 获取可返回的数据传输实体
+     * @param id 帖子 id
+     * @return 数据传输对象
+     */
+    TopicDTO visitTopic(Long id);
+
+    /**
+     * 获取最新帖子列表
+     * @return 最新帖子列表
+     */
+    List<TopicDTO> getNewTopicList();
+
 }

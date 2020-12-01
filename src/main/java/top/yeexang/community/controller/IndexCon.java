@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import top.yeexang.community.annotation.UserLoginToken;
 import top.yeexang.community.cache.CategoryCache;
 import top.yeexang.community.dto.CategoryDTO;
+import top.yeexang.community.dto.TopicDTO;
 import top.yeexang.community.service.TopicSev;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class IndexCon {
     @ApiOperation(value = "跳转到首页")
     public String index(Model model) {
         loadCategoryCache(model);
+        loadNewTopicList(model);
         return "index";
     }
 
@@ -47,5 +49,12 @@ public class IndexCon {
         // 获取专栏分类缓存
         List<CategoryDTO> categoryDTOS = categoryCache.getAllCategory();
         model.addAttribute("categorieyDTOS", categoryDTOS);
+    }
+
+    @ApiOperation(value = "加载最新帖子列表")
+    private void loadNewTopicList(Model model) {
+        // 获取最新帖子列表
+        List<TopicDTO> topicDTOList = topicSev.getNewTopicList();
+        model.addAttribute("topicDTOList", topicDTOList);
     }
 }

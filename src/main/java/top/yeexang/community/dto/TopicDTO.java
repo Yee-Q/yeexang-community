@@ -17,7 +17,6 @@ public class TopicDTO {
     private String description;
     private Long gmtCreate;
     private Long gmtModified;
-    private Long creatorId;
     private UserDTO creator;
     private Integer commentCount;
     private Integer viewCount;

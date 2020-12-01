@@ -11,8 +11,16 @@
         SELECT * FROM topic
     </select>
 
+    <select id="selectTopicById" resultType="Topic">
+        SELECT * FROM topic WHERE id = #{id}
+    </select>
+
     <select id="selectHotTopics" resultType="Topic">
         SELECT * FROM topic ORDER BY gmt_latest_comment DESC LIMIT 0, 19
     </select>
+
+    <update id="updateTopicViewCountById">
+        UPDATE topic SET view_count = view_count + 1 WHERE id = #{id}
+    </update>
 
 </mapper>

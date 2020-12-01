@@ -20,6 +20,8 @@ public enum ResponseCodeEnum {
     EMAIL_ERROR_OR_NOT_EXISTS(4003, "邮箱错误或不存在"),
     PASS_ERROR(4003, "密码错误，再仔细检查检查呗~"),
     NO_LOGIN(4004, "请先登录再进行操作哦~"),
+    TOPIC_NOT_EXISTS(4005, "在星球上没有找到这个帖子的信息，等一会再试吧~"),
+    COMMENT_CONTENT_NOT_EMPTY(4006, "评论内容不能为空"),
     ;
 
     private final Integer code;

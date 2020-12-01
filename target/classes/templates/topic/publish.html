@@ -69,7 +69,6 @@
 </div>
 
 <script src="/layui/layui.js"></script>
-
 <script th:inline="javascript">
 
   layui.config({
@@ -85,7 +84,7 @@
     layedit.set({
       uploadImage: {
         url: '' // 接口url
-        ,type: '' // 默认post
+        , type: '' // 默认post
       }
     });
     var topic = layedit.build('topic-content', {
@@ -98,13 +97,14 @@
         layer.msg('标签数量不能超过5个哦~');
         return false;
       }
-      if($(tagElem).text().length > 10) {
+      if ($(tagElem).text().length > 10) {
         layer.msg('标签长度不能超过10个字符哦~');
         return false;
       }
     });
     form.on('submit(publish-submit)', function (data) {
-      var jsonData  = JSON.stringify(data.field);
+      var jsonData = JSON.stringify(data.field);
+      console.log(jsonData);
       var tag = '';
       $('.tag-item').each(function () {
         tag += $(this).text() + '';
@@ -121,24 +121,24 @@
         contentType: 'application/json',
         dataType: 'JSON',
         data: jsonData,
-        success: function(res) {
+        success: function (res) {
           if (res.code === 2000) {
             layer.open({
               type: 1
-              ,content: '<div style="padding: 20px 100px;">'+ '发表成功！点击确定按钮返回首页' +'</div>'
-              ,btn: '确定'
-              ,btnAlign: 'c' //按钮居中
-              ,yes: function(){
+              , content: '<div style="padding: 20px 100px;">' + '发表成功！点击确定按钮返回首页' + '</div>'
+              , btn: '确定'
+              , btnAlign: 'c' //按钮居中
+              , yes: function () {
                 $(location).attr('href', '/');
               }
             });
           } else {
             layer.open({
               type: 1
-              ,content: '<div style="padding: 20px 100px;">'+ '发生未知错误！请稍后再试' +'</div>'
-              ,btn: '关闭'
-              ,btnAlign: 'c' //按钮居中
-              ,yes: function(){
+              , content: '<div style="padding: 20px 100px;">' + '发生未知错误！请稍后再试' + '</div>'
+              , btn: '关闭'
+              , btnAlign: 'c' //按钮居中
+              , yes: function () {
                 layer.closeAll();
               }
             });
@@ -148,13 +148,11 @@
       return false;
     });
     form.verify({
-      content:function () {
+      content: function () {
         return layedit.sync(topic);
       }
     });
   });
-
-</script>
-
+  </script>
 </body>
 </html>

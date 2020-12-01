@@ -32,4 +32,19 @@ public interface TopicDao {
      * @return 最近一次被回复的帖子列表
      */
     List<Topic> selectHotTopics(int size);
+
+    /**
+     * 根据 id 获取指定帖子
+     * @param id 帖子id
+     * @return 指定的帖子信息
+     */
+    Topic selectTopicById(Long id);
+
+    /**
+     * 更新帖子浏览数
+     * @param id 帖子id
+     */
+    void updateTopicViewCountById(Long id);
+
+
 }

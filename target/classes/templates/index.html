@@ -21,6 +21,7 @@
 
     <!-- 首页轮播 -->
     <div class="layui-col-md8">
+
       <div class="fly-panel">
         <div class="layui-carousel" id="carousel">
           <div carousel-item>
@@ -37,17 +38,17 @@
       <div class="fly-panel" style="margin-bottom: 0;">
         
         <div class="fly-panel-title fly-filter">
-          <a href="" class="layui-this">最新</a>
+          <span class="layui-this" style="color: #5FB878">大家在讨论</span>
         </div>
 
-        <!--<ul class="fly-list">
-          <li th:each="topicDTO : ${topicDTOS}">
-            <a href="javascript:void(0)" class="fly-avatar">
+        <ul class="fly-list">
+          <li th:each="topicDTO : ${topicDTOList}">
+            <a th:href="@{'/topic/'+ ${topicDTO.id}}" class="fly-avatar">
               <img th:src="${topicDTO.creator.avatarUrl}">
             </a>
             <h2>
               <a class="layui-badge" th:text="${topicDTO.category.categoryName}"></a>
-              <a href="javascript:void(0)" th:text="${topicDTO.title}"></a>
+              <a th:href="@{'/topic/'+ ${topicDTO.id}}" th:text="${topicDTO.title}"></a>
             </h2>
             <div class="fly-list-info">
               <a href="javascript:void(0)" link>
@@ -65,8 +66,11 @@
               <span class="layui-badge layui-bg-orange" th:if="${topicDTO.status == 2 || topicDTO.status == 3}">置顶</span>
             </div>
           </li>
-        </ul>-->
+        </ul>
       </div>
+
+      <button type="button" class="layui-btn layui-btn-primary layui-btn-fluid" style="margin-top: 15px">换一批</button>
+
     </div>
 
     <div class="layui-col-md4">
@@ -196,43 +200,43 @@
       <dl class="fly-panel fly-list-one">
         <dt class="fly-panel-title">本周热议</dt>
         <dd>
-          <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
+          <a href="topic/detail.html">基于 layui 的极简社区页面模版</a>
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
         </dd>
         <dd>
-          <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
+          <a href="topic/detail.html">基于 layui 的极简社区页面模版</a>
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
         </dd>
         <dd>
-          <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
+          <a href="topic/detail.html">基于 layui 的极简社区页面模版</a>
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
         </dd>
         <dd>
-          <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
+          <a href="topic/detail.html">基于 layui 的极简社区页面模版</a>
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
         </dd>
         <dd>
-          <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
+          <a href="topic/detail.html">基于 layui 的极简社区页面模版</a>
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
         </dd>
         <dd>
-          <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
+          <a href="topic/detail.html">基于 layui 的极简社区页面模版</a>
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
         </dd>
         <dd>
-          <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
+          <a href="topic/detail.html">基于 layui 的极简社区页面模版</a>
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
         </dd>
         <dd>
-          <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
+          <a href="topic/detail.html">基于 layui 的极简社区页面模版</a>
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
         </dd>
         <dd>
-          <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
+          <a href="topic/detail.html">基于 layui 的极简社区页面模版</a>
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
         </dd>
         <dd>
-          <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
+          <a href="topic/detail.html">基于 layui 的极简社区页面模版</a>
           <span><i class="iconfont icon-pinglun1"></i> 16</span>
         </dd>
 
