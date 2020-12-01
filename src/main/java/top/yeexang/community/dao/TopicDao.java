@@ -1,5 +1,6 @@
 package top.yeexang.community.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import top.yeexang.community.entity.Topic;
 
@@ -31,20 +32,20 @@ public interface TopicDao {
      * @param size 需要的帖子数量
      * @return 最近一次被回复的帖子列表
      */
-    List<Topic> selectHotTopics(int size);
+    List<Topic> selectHotTopics(@Param("size") int size);
 
     /**
      * 根据 id 获取指定帖子
      * @param id 帖子id
      * @return 指定的帖子信息
      */
-    Topic selectTopicById(Long id);
+    Topic selectTopicById(@Param("id") Long id);
 
     /**
      * 更新帖子浏览数
      * @param id 帖子id
      */
-    void updateTopicViewCountById(Long id);
+    void updateTopicViewCountById(@Param("id") Long id);
 
 
 }

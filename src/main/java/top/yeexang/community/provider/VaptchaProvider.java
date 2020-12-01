@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Vpatcha 人机校验服务服务提供者
+ *
  * @author yeeq
  * @date 2020/10/2
  */

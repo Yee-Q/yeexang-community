@@ -43,15 +43,13 @@ public class TopicSevImpl implements TopicSev {
 
     @Override
     public ResultDTO<?> publishTopic(TopicDTO topicDTO, UserDTO userDTO) {
+
         Topic topic = new Topic();
         BeanUtils.copyProperties(topicDTO, topic);
         topic.setGmtCreate(System.currentTimeMillis()).setGmtModified(System.currentTimeMillis())
                 .setCreator(userDTO.getId()).setCommentCount(0).setViewCount(1).setLikeCount(0)
                 .setTag(topicDTO.getTag()).setGmtLatestComment(System.currentTimeMillis())
                 .setStatus(0).setCategoryId(topicDTO.getCategoryId());
-        if (topicDao.createTopic(topic) != 1) {
-            return ResultDTO.errorOf(ResponseCodeEnum.REQUEST_FAILED);
-        }
         return ResultDTO.successOf();
     }
 

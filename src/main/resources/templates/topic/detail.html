@@ -64,41 +64,43 @@
         <ul class="jieda" id="jieda">
           <!-- 有数据时 -->
           <li class="jieda-daan" th:if="${commentDTOList.size() != 0}" th:each="commentDTO : ${commentDTOList}">
-            <!-- 评论者信息 -->
-            <div class="detail-about detail-about-reply">
-              <a class="fly-avatar" href="">
-                <img th:src="${commentDTO.userDTO.avatarUrl}" alt=" ">
-              </a>
-              <div class="fly-detail-user">
-                <a href="" class="fly-link">
-                  <cite th:text="${commentDTO.userDTO.name}"></cite>
-                  <i class="layui-badge fly-badge-vip" th:if="${commentDTO.userDTO.vip}"></i>
+            <div th:id="${'comment-' + commentDTO.id}">
+              <!-- 评论者信息 -->
+              <div class="detail-about detail-about-reply">
+                <a class="fly-avatar" href="">
+                  <img th:src="${commentDTO.userDTO.avatarUrl}" alt=" ">
                 </a>
-                <span th:if="${commentDTO.userDTO.id == topicDTO.creator.id}">(楼主)</span>
+                <div class="fly-detail-user">
+                  <a href="" class="fly-link">
+                    <cite th:text="${commentDTO.userDTO.name}"></cite>
+                    <i class="layui-badge fly-badge-vip" th:if="${commentDTO.userDTO.vip}"></i>
+                  </a>
+                  <span th:if="${commentDTO.userDTO.id == topicDTO.creator.id}">(楼主)</span>
+                </div>
+                <div class="detail-hits">
+                  <span th:text="${commentDTO.gmtModified}"></span>
+                </div>
               </div>
-              <div class="detail-hits">
-                <span th:text="${commentDTO.gmtModified}"></span>
+              <!-- 评论内容 -->
+              <div class="detail-body jieda-body photos">
+                <p th:text="${commentDTO.content}"></p>
               </div>
-            </div>
-            <!-- 评论内容 -->
-            <div class="detail-body jieda-body photos">
-              <p th:text="${commentDTO.content}"></p>
-            </div>
-            <!-- 评论状态 -->
-            <div class="jieda-reply">
-              <!-- 点赞数 -->
-              <span class="jieda-zan" type="zan">
-                <i class="iconfont icon-zan"></i>
-                <em th:text="${commentDTO.likeAcount}">0</em>
-              </span>
-              <!-- 二级评论 -->
-              <span type="reply">
-                <i class="iconfont icon-svgmoban53"></i>
-                <em th:text="${commentDTO.commentCount}">0</em>
-              </span>
-              <div class="jieda-admin">
-                <span type="edit" th:if="${loginUser != null && loginUser.id == commentDTO.userDTO.id}">编辑</span>
-                <span type="del" th:if="${loginUser != null && (loginUser.id == commentDTO.userDTO.id || loginUser.id == topicDTO.creator.id)}">删除</span>
+              <!-- 评论状态 -->
+              <div class="jieda-reply">
+                <!-- 点赞数 -->
+                <span class="jieda-zan" type="zan">
+                  <i class="iconfont icon-zan"></i>
+                  <em th:text="${commentDTO.likeCount}">0</em>
+                </span>
+                <!-- 二级评论 -->
+                <span type="reply">
+                  <i class="iconfont icon-svgmoban53"></i>
+                  <em th:text="${commentDTO.commentCount}">0</em>
+                </span>
+                <div class="jieda-admin">
+                  <span type="edit" th:if="${loginUser != null && loginUser.id == commentDTO.userDTO.id}">编辑</span>
+                  <span type="del" th:if="${loginUser != null && (loginUser.id == commentDTO.userDTO.id || loginUser.id == topicDTO.creator.id)}">删除</span>
+                </div>
               </div>
             </div>
           </li>
@@ -108,11 +110,11 @@
         <!-- 写评论 -->
         <div class="layui-form layui-form-pane">
           <form>
-            <input id="parentId" name="parentId" type="hidden" th:value="${topicDTO.id}">
-            <input id="type" name="type" type="hidden" value="1">
+            <input name="parentId" type="hidden" th:value="${topicDTO.id}">
+            <input name="type" type="hidden" value="1">
             <div class="layui-form-item layui-form-text">
               <div class="layui-input-block">
-                <textarea id="L_content" name="content" required lay-verify="required" placeholder="请输入内容"  class="layui-textarea fly-editor" style="height: 150px;"></textarea>
+                <textarea name="content" required lay-verify="required" placeholder="请输入内容"  class="layui-textarea fly-editor" style="height: 150px;"></textarea>
               </div>
             </div>
             <div class="layui-form-item">
@@ -192,12 +194,7 @@
 </div>
 
 <div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
+  <p><a href="" target="_blank">异想社区</a></p>
 </div>
 
 <script src="/layui/layui.js"></script>
@@ -218,13 +215,10 @@
         dataType: 'JSON',
         data: jsonData,
         success: function (res) {
-          if (res.code === 2000) {
-            layer.msg('评论成功！');
-            $(location).reload();
-          } else if (res.code === 4006) {
+          if (res.code === 4006) {
             layer.msg(res.data);
           } else {
-            layer.msg('发生未知错误，请稍后再试');
+            location.reload();
           }
         }
       });

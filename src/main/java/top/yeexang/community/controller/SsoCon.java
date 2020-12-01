@@ -49,12 +49,11 @@ public class SsoCon {
     @GetMapping("/sso/{action}")
     @ApiOperation(value = "跳转到注册或登录页面")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "action", value = "登录或注册指令", dataType = "String", paramType = "path"),
+            @ApiImplicitParam(name = "action", value = "登录或注册指令", dataType = "String"),
     })
     public String toLoginOrRegister(@PathVariable(name = "action") String action, HttpServletRequest request, Model model) {
-
-        UserDTO loginUser = (UserDTO) request.getAttribute("loginUser");
         // 判断用户是否已登录
+        UserDTO loginUser = (UserDTO) request.getAttribute("loginUser");
         if (loginUser != null) {
             return "redirect:/";
         }

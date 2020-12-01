@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import top.yeexang.community.annotation.UserLoginToken;
 import top.yeexang.community.cache.CategoryCache;
 import top.yeexang.community.dto.CategoryDTO;
 import top.yeexang.community.dto.TopicDTO;
 import top.yeexang.community.service.TopicSev;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -31,15 +31,17 @@ public class IndexCon {
     @GetMapping("/")
     @ApiOperation(value = "跳转到首页")
     public String index(Model model) {
+        // 加载专栏分类缓存
         loadCategoryCache(model);
+        // 加载最新帖子列表
         loadNewTopicList(model);
         return "index";
     }
 
-    @UserLoginToken
     @GetMapping("/publish")
     @ApiOperation(value = "跳转到发表帖子页面")
-    public String publish(Model model) {
+    public String publish(Model model, HttpServletRequest request) {
+        // 加载专栏分类缓存
         loadCategoryCache(model);
         return "topic/publish";
     }

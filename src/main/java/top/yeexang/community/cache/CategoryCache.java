@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * <p>论坛专栏分类缓存，用于存放专栏分类名</p>
+ *
  * @author yeeq
  * @date 2020/10/6
  */
@@ -31,7 +33,10 @@ public class CategoryCache {
      * @return 分类缓存中的所有数据
      */
     public List<CategoryDTO> getAllCategory() {
-
+        // 为空则先进行初始化
+        if (CATEGORYDTOS.isEmpty()) {
+            initCategoryCache();
+        }
         List<CategoryDTO> categoryDTOList = new ArrayList<>(CATEGORYDTOS);
         return categoryDTOList;
     }
@@ -45,6 +50,7 @@ public class CategoryCache {
 
         List<Category> updateCategoryList = categoryDao.selectAllCategory();
         if (updateCategoryList.isEmpty()) {
+            log.info("无法从数据库获取数据，专栏分类初始化失败");
             return false;
         }
         List<CategoryDTO> categoryDTOList = updateCategoryList.stream().map(category -> {

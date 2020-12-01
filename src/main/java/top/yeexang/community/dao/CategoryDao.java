@@ -1,5 +1,6 @@
 package top.yeexang.community.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import top.yeexang.community.entity.Category;
 
@@ -25,5 +26,5 @@ public interface CategoryDao {
      * @param id 分类id
      * @return 符合查询条件的  专栏分类信息
      */
-    Category selectCategoryById(Integer id);
+    Category selectCategoryById(@Param("id") Integer id);
 }

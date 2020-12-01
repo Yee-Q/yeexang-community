@@ -30,8 +30,8 @@ public class ValidationCon {
     @ResponseBody
     @ApiOperation(value = "手势验证码校验")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "校验令牌", dataType = "String", paramType = "path"),
-            @ApiImplicitParam(name = "scene", value = "场景值", dataType = "Integer", paramType = "path")
+            @ApiImplicitParam(name = "token", value = "校验令牌", dataType = "String"),
+            @ApiImplicitParam(name = "scene", value = "场景值", dataType = "Integer")
     })
     public ResultDTO<?> validate(@RequestParam(name = "token") String token,
                                  @RequestParam(name = "scene") Integer scene, HttpServletRequest request) {

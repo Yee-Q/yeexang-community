@@ -1,5 +1,6 @@
 package top.yeexang.community.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import top.yeexang.community.cache.CategoryCache;
+import top.yeexang.community.dto.CategoryDTO;
 import top.yeexang.community.dto.CommentDTO;
 import top.yeexang.community.dto.TopicDTO;
 import top.yeexang.community.service.CommentSev;
@@ -21,6 +24,7 @@ import java.util.List;
  * @date 2020/10/11
  */
 @Controller
+@Api(tags = "帖子服务接口")
 public class TopicCon {
 
     @Autowired
@@ -31,6 +35,9 @@ public class TopicCon {
 
     @Autowired
     private TagSev tagSev;
+
+    @Autowired
+    private CategoryCache categoryCache;
 
     @GetMapping("/topic/{id}")
     @ApiOperation(value = "访问帖子详细信息")
@@ -44,6 +51,9 @@ public class TopicCon {
         List<CommentDTO> commentDTOList = commentSev.getCommentList(id, 1);
         // 返回帖子标签信息
         List<String> tags = tagSev.getTopicTags(topicDTO.getTag());
+        // 获取专栏分类信息
+        List<CategoryDTO> categoryDTOS = categoryCache.getAllCategory();
+        model.addAttribute("categorieyDTOS", categoryDTOS);
         model.addAttribute("topicDTO", topicDTO);
         model.addAttribute("commentDTOList", commentDTOList);
         model.addAttribute("tags", tags);

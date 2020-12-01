@@ -21,6 +21,8 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
+ * <p>session拦截器，在这里处理JWT认证和登录校验</p>
+ *
  * @author yeeq
  * @date 2020/10/4
  */
@@ -43,12 +45,12 @@ public class SessionInterceptor implements HandlerInterceptor {
             }
             return true;
         }
-
+        /* 获取 cookie */
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         Cookie[] cookies = request.getCookies();
         boolean hasToken = false;
-
+        /* JWT 认证 */
         if (cookies != null && cookies.length != 0) {
             for (Cookie cookie : cookies) {
                 if ("token".equals(cookie.getName())) {
@@ -75,11 +77,10 @@ public class SessionInterceptor implements HandlerInterceptor {
                 }
             }
         }
-
+        /* 登录校验 */
         if (method.isAnnotationPresent(UserLoginToken.class)) {
             UserLoginToken userLoginToken = method.getAnnotation(UserLoginToken.class);
             if (userLoginToken.required()) {
-                // 执行认证
                 if (!hasToken) {
                     throw new CustomizeException(ResponseCodeEnum.NO_LOGIN);
                 }

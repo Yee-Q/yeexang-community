@@ -17,18 +17,21 @@ public class ResultDTO <T> {
     private T data;
 
     /**
-     * 返回一个响应失败结果
+     * <p>返回一个响应失败结果</p>
+     *
      * @return 响应失败结果
      */
-    public static ResultDTO<Object> errorOf() {
-        ResultDTO<Object> resultDTO = new ResultDTO<>();
+    public static ResultDTO<?> errorOf() {
+
+        ResultDTO<?> resultDTO = new ResultDTO<>();
         resultDTO.setCode(ResponseCodeEnum.REQUEST_FAILED.getCode());
         resultDTO.setMessage(ResponseCodeEnum.REQUEST_FAILED.getMessage());
         return resultDTO;
     }
 
     /**
-     * 返回一个附带失败响应码和失败信息的响应结果
+     * <p>返回一个附带失败响应码和失败信息的响应结果</p>
+     *
      * @param emailAlreadyExists 异常枚举
      * @return 附带失败响应码和失败信息的响应结果
      */

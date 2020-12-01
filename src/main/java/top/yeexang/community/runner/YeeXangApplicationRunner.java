@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import top.yeexang.community.cache.CategoryCache;
 
 /**
+ * 程序启动前预加载
+ *
  * @author yeeq
  * @date 2020/10/6
  */

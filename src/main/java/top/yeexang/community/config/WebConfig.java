@@ -9,6 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import top.yeexang.community.interceptor.SessionInterceptor;
 
 /**
+ * 拦截器配置类
+ *
  * @author yeeq
  * @date 2020/10/4
  */
@@ -20,6 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 拦截所有请求
         registry.addInterceptor(sessionInterceptor).addPathPatterns("/**");
     }
 
