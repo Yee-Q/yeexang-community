@@ -23,4 +23,12 @@
         UPDATE topic SET view_count = view_count + 1 WHERE id = #{id}
     </update>
 
+    <update id="updateTopicCommentCountById">
+        UPDATE topic SET comment_count = comment_count + 1 WHERE id = #{id}
+    </update>
+
+    <delete id="deleteTopicById" parameterType="Long">
+        DELETE FROM topic WHERE id = #{id}
+    </delete>
+
 </mapper>

@@ -9,9 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
+import top.yeexang.community.annotation.UserLoginToken;
 import top.yeexang.community.cache.CategoryCache;
 import top.yeexang.community.dto.CategoryDTO;
 import top.yeexang.community.dto.CommentDTO;
+import top.yeexang.community.dto.ResultDTO;
 import top.yeexang.community.dto.TopicDTO;
 import top.yeexang.community.service.CommentSev;
 import top.yeexang.community.service.TagSev;
@@ -60,4 +63,12 @@ public class TopicCon {
         return "topic/detail";
     }
 
+    @UserLoginToken
+    @ResponseBody
+    @GetMapping("/topic/del/{id}")
+    @ApiOperation(value = "楼主删除帖子")
+    public ResultDTO<?> deleteTopic(@PathVariable(name = "id") Long id, Model model) {
+        topicSev.deleteTopic(id);
+        return ResultDTO.successOf();
+    }
 }

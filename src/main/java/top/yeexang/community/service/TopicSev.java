@@ -43,4 +43,21 @@ public interface TopicSev {
      */
     List<TopicDTO> getNewTopicList();
 
+    /**
+     * 增加帖子阅读数
+     * @param id 帖子id
+     */
+    void incView(Long id);
+
+    /**
+     * 增加帖子评论数
+     * @param id 帖子id
+     */
+    void incComment(Long id);
+
+    /**
+     * 删除帖子
+     * @param id 帖子id
+     */
+    void deleteTopic(Long id);
 }

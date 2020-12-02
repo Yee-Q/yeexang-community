@@ -47,5 +47,15 @@ public interface TopicDao {
      */
     void updateTopicViewCountById(@Param("id") Long id);
 
+    /**
+     * 更新帖子评论数
+     * @param id 帖子id
+     */
+    void updateTopicCommentCountById(@Param("id") Long id);
 
+    /**
+     * 根据id删除帖子
+     * @param id 帖子id
+     */
+    void deleteTopicById(@Param("id") Long id);
 }

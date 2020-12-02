@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.yeexang.community.dao.CategoryDao;
+import top.yeexang.community.dao.CommentDao;
 import top.yeexang.community.dao.TopicDao;
 import top.yeexang.community.dao.UserDao;
+import top.yeexang.community.dto.CommentDTO;
 import top.yeexang.community.dto.ResultDTO;
 import top.yeexang.community.dto.TopicDTO;
 import top.yeexang.community.dto.UserDTO;
@@ -15,6 +17,7 @@ import top.yeexang.community.entity.Topic;
 import top.yeexang.community.entity.User;
 import top.yeexang.community.enums.ResponseCodeEnum;
 import top.yeexang.community.exception.CustomizeException;
+import top.yeexang.community.service.CommentSev;
 import top.yeexang.community.service.TopicSev;
 import top.yeexang.community.service.UserSev;
 
@@ -41,6 +44,9 @@ public class TopicSevImpl implements TopicSev {
     @Autowired
     private UserSev userSev;
 
+    @Autowired
+    private CommentSev commentSev;
+
     @Override
     public ResultDTO<?> publishTopic(TopicDTO topicDTO, UserDTO userDTO) {
 
@@ -50,6 +56,7 @@ public class TopicSevImpl implements TopicSev {
                 .setCreator(userDTO.getId()).setCommentCount(0).setViewCount(1).setLikeCount(0)
                 .setTag(topicDTO.getTag()).setGmtLatestComment(System.currentTimeMillis())
                 .setStatus(0).setCategoryId(topicDTO.getCategoryId());
+        topicDao.createTopic(topic);
         return ResultDTO.successOf();
     }
 
@@ -84,11 +91,21 @@ public class TopicSevImpl implements TopicSev {
         return topicDTOList;
     }
 
-    /**
-     * 增加帖子阅读数
-     * @param id 帖子id
-     */
+    @Override
     public void incView(Long id) {
         topicDao.updateTopicViewCountById(id);
+    }
+
+    @Override
+    public void incComment(Long id) {
+        topicDao.updateTopicCommentCountById(id);
+    }
+
+    @Override
+    public void deleteTopic(Long id) {
+        // 首先把帖子下所有评论删除
+        commentSev.deleteCommentByParentId(id);
+        // 删除帖子
+        topicDao.deleteTopicById(id);
     }
 }

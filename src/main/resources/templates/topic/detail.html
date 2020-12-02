@@ -51,8 +51,8 @@
           </div>
           <div class="detail-hits" id="LAY_jieAdmin">
             最后一次编辑于: <span th:text="${#dates.format(topicDTO.gmtModified,'yyyy-MM-dd HH:mm')}"></span>
-            <span class="layui-btn layui-btn-xs jie-admin" type="edit" th:if="${loginUser != null &&  loginUser.id == topicDTO.creator.id}"><a>编辑</a></span>
-            <span class="layui-btn layui-btn-xs jie-admin" type="del" th:if="${loginUser != null &&  loginUser.id == topicDTO.creator.id}"><a>删除</a></span>
+            <span class="layui-btn layui-btn-xs jie-admin" type="edit" th:if="${loginUser != null &&  loginUser.id == topicDTO.creator.id}">编辑</span>
+            <span id="topic-del" class="layui-btn layui-btn-xs jie-admin" type="del" th:if="${loginUser != null &&  loginUser.id == topicDTO.creator.id}">删除</span>
           </div>
         </div>
         <!-- 描述内容 -->
@@ -200,10 +200,26 @@
 <script src="/layui/layui.js"></script>
 <script th:inline="javascript">
 
-  layui.use(['jquery', 'form', 'layer'], function () {
+  layui.use(['jquery', 'form', 'layer', 'element'], function () {
     var $ = layui.$;
     var form = layui.form;
     var layer = layui.layer;
+    var element = layui.element;
+    $("#topic-del").click(function () {
+      layer.confirm('您确定要删除该帖子吗？', {
+        btn: ['确定','取消']
+      }, function(){
+        $.get('/topic/del/' + [[${topicDTO.id}]], function (result) {
+          if (result.code === 2000) {
+            $(location).attr('href', '/');
+          } else {
+            layer.msg('删除失败，请稍后再试！');
+          }
+        });
+      }, function(){
+
+      });
+    });
     form.on('submit(comment-submit)', function (data) {
       var jsonData = JSON.stringify(data.field);
       console.log(data.field.length);
