@@ -30,10 +30,10 @@
           <span class="layui-badge layui-bg-black" th:if="${topicDTO.status == 1 || topicDTO.status == 3}">推荐</span>
           <span class="layui-badge layui-bg-red" th:if="${topicDTO.status == 1 || topicDTO.status == 3}">精帖</span>
           <!--  标签信息 -->
-          <span class="layui-btn layui-btn-xs" th:each="tag : ${tags}" th:text="tag"></span>
+          <span class="layui-btn layui-btn-xs" th:each="tag : ${tags}" th:text="${tag}"></span>
           <!-- 帖子状态 -->
           <span class="fly-list-nums">
-            <i class="iconfont" title="回复">&#xe60c;</i><span th:text="${commentDTOList.size()}"></span>
+            <i class="iconfont" title="回复">&#xe60c;</i><span th:text="${topicDTO.commentCount}"></span>
             <i class="iconfont" title="人气">&#xe60b;</i><span th:text="${topicDTO.viewCount}"></span>
             <i class="layui-icon layui-icon-praise"></i>   <span th:text="${topicDTO.likeCount}"></span>
           </span>
@@ -78,7 +78,7 @@
                   <span th:if="${commentDTO.userDTO.id == topicDTO.creator.id}">(楼主)</span>
                 </div>
                 <div class="detail-hits">
-                  <span th:text="${commentDTO.gmtModified}"></span>
+                  最后一次编辑于: <span th:text="${#dates.format(topicDTO.gmtModified,'yyyy-MM-dd HH:mm')}"></span>
                 </div>
               </div>
               <!-- 评论内容 -->
@@ -87,19 +87,29 @@
               </div>
               <!-- 评论状态 -->
               <div class="jieda-reply">
+                <div class="jieda-admin">
+                  <span type="edit" th:if="${loginUser != null && loginUser.id == commentDTO.userDTO.id}">编辑</span>
+                  <span type="del" th:if="${loginUser != null && (loginUser.id == commentDTO.userDTO.id || loginUser.id == topicDTO.creator.id)}">删除</span>
+                  <span type="second-reply" th:text="${'回复(' + commentDTO.commentCount} + ')'" th:data-id="${commentDTO.id}"></span>
+                </div>
                 <!-- 点赞数 -->
                 <span class="jieda-zan" type="zan">
                   <i class="iconfont icon-zan"></i>
                   <em th:text="${commentDTO.likeCount}">0</em>
                 </span>
-                <!-- 二级评论 -->
-                <span type="reply">
-                  <i class="iconfont icon-svgmoban53"></i>
-                  <em th:text="${commentDTO.commentCount}">0</em>
-                </span>
-                <div class="jieda-admin">
-                  <span type="edit" th:if="${loginUser != null && loginUser.id == commentDTO.userDTO.id}">编辑</span>
-                  <span type="del" th:if="${loginUser != null && (loginUser.id == commentDTO.userDTO.id || loginUser.id == topicDTO.creator.id)}">删除</span>
+                <div class="layui-card" style="background-color: #f7f8fa; margin-top: 15px;
+                margin-bottom: 15px; padding-top: 10px; padding-bottom: 10px; display: none" th:id="${'second-reply-' + commentDTO.id}">
+                  <div th:id="${'second-reply-container-' + commentDTO.id}"></div>
+                  <form class="layui-form">
+                    <input name="parentId" type="hidden" th:value="${commentDTO.id}">
+                    <input name="type" type="hidden" value="2">
+                    <div class="layui-card-body">
+                      <textarea id="sub-comment-textarea" name="content" required lay-verify="required" placeholder="请输入内容"  class="layui-textarea fly-editor" style="height: 80px;"></textarea>
+                    </div>
+                    <div class="layui-card-body" style="text-align: right">
+                      <button class="layui-btn layui-btn-sm" lay-filter="second-comment-submit" lay-submit>提交回复</button>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
@@ -205,6 +215,51 @@
     var form = layui.form;
     var layer = layui.layer;
     var element = layui.element;
+    // 更新子评论
+    $.updateSubComment = function (id) {
+      var $subReplyContainer = $("#second-reply-container-" + id);
+      // 清空子元素
+      $subReplyContainer.children().remove();
+      // 获取子评论
+      $.getJSON("/comment/" + id, function (data) {
+        $.each( data.data, function(index, comment) {
+
+          let $layuiCardHeader = $("<div/>", {
+            "class": "layui-card-header"
+          }).append($("<a/>", {
+            "href": ""
+          }).append($("<img/>", {
+            "src": comment.userDTO.avatarUrl,
+            "style": "width: 32px; height: 32px;"
+          }))).append($("<a/>", {
+            "href": ""
+          }).append($("<span/>", {
+            html: comment.userDTO.name,
+            "style": "margin-left: 5px"
+          })));
+
+          if (comment.userDTO.vip === true) {
+            $layuiCardHeader.append($("<i/>", {
+              "class": "layui-badge fly-badge-vip",
+              html: VIP
+            }));
+          }
+
+          let $layuiCardBody = $("<div/>", {
+            "class": "layui-card-body",
+            html : comment.content
+          });
+          console.log($layuiCardHeader.html());
+          console.log("--------------------------------------------------")
+          $subReplyContainer.append($layuiCardHeader);
+          console.log($layuiCardBody.html());
+          console.log("--------------------------------------------------")
+          $subReplyContainer.append($layuiCardBody);
+          console.log($subReplyContainer.html());
+          console.log("**************************************************")
+        });
+      });
+    };
     $("#topic-del").click(function () {
       layer.confirm('您确定要删除该帖子吗？', {
         btn: ['确定','取消']
@@ -220,9 +275,20 @@
 
       });
     });
+    // 展开收起二级评论
+    $('[type = second-reply]').click(function () {
+      let id = $(this).attr("data-id");
+      var $subReply = $("#second-reply-" + id);
+      if($subReply.children(':first').children().length !== 0) {
+        // 已经有子评论，直接展示
+        $subReply.toggle();
+      } else {
+        $.updateSubComment(id);
+        $subReply.toggle();
+      }
+    });
     form.on('submit(comment-submit)', function (data) {
       var jsonData = JSON.stringify(data.field);
-      console.log(data.field.length);
       $.ajax({
         type: "post",
         url: "/comment",
@@ -235,6 +301,27 @@
             layer.msg(res.data);
           } else {
             location.reload();
+          }
+        }
+      });
+      return false;
+    });
+    form.on('submit(second-comment-submit)', function (data) {
+      var jsonData = JSON.stringify(data.field);
+      $.ajax({
+        type: "post",
+        url: "/comment/",
+        async: true,
+        contentType: 'application/json',
+        dataType: 'JSON',
+        data: jsonData,
+        success: function (res) {
+          if (res.code === 4006) {
+            layer.msg(res.data);
+          } else {
+            let json = $.parseJSON(jsonData);
+            $.updateSubComment(json["parentId"]);
+            $('#sub-comment-textarea').val('');
           }
         }
       });

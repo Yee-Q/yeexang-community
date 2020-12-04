@@ -53,7 +53,7 @@ public interface TopicSev {
      * 增加帖子评论数
      * @param id 帖子id
      */
-    void incComment(Long id);
+    void incTopicComment(Long id);
 
     /**
      * 删除帖子

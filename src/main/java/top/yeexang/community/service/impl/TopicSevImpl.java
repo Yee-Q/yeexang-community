@@ -97,7 +97,7 @@ public class TopicSevImpl implements TopicSev {
     }
 
     @Override
-    public void incComment(Long id) {
+    public void incTopicComment(Long id) {
         topicDao.updateTopicCommentCountById(id);
     }
 
