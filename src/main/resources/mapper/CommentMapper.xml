@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.yeexang.community.dao.CommentDao">
+
+    <select id="selectCommentByParentIdAndType" resultType="Comment">
+        SELECT * FROM comment WHERE parent_id = #{id} AND type = #{type} ORDER BY gmt_create
+    </select>
+
+    <select id="selectCommentByParentId" resultType="Comment">
+        SELECT * FROM comment WHERE parent_id = #{id}
+    </select>
+
+    <select id="selectCommentById" resultType="Comment">
+        SELECT * FROM comment WHERE id = #{id}
+    </select>
+
+    <insert id="createComment" parameterType="Comment">
+        INSERT INTO comment(parent_id, content, commentator, gmt_create, gmt_modified, like_count, type, comment_count)
+        VALUES(#{parentId}, #{content}, #{commentator}, #{gmtCreate}, #{gmtModified}, #{likeCount}, #{type}, #{commentCount});
+    </insert>
+
+    <delete id="deleteCommentByParentId" parameterType="long">
+        DELETE FROM comment WHERE parent_id = #{parentId}
+    </delete>
+
+    <update id="updateSubCommentCountById">
+        UPDATE comment SET comment_count = comment_count + 1 WHERE id = #{id}
+    </update>
+
+</mapper>

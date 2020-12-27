@@ -60,4 +60,11 @@ public interface TopicSev {
      * @param id 帖子id
      */
     void deleteTopic(Long id);
+
+    /**
+     * 获取帖子
+     * @param id 帖子id
+     * @return 帖子
+     */
+    Topic getTopic(Long id);
 }

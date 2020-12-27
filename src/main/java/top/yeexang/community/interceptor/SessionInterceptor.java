@@ -2,6 +2,7 @@ package top.yeexang.community.interceptor;
 
 import com.auth0.jwt.interfaces.Claim;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.method.HandlerMethod;
@@ -12,6 +13,7 @@ import top.yeexang.community.annotation.UserLoginToken;
 import top.yeexang.community.dto.UserDTO;
 import top.yeexang.community.enums.ResponseCodeEnum;
 import top.yeexang.community.exception.CustomizeException;
+import top.yeexang.community.service.NotificationSev;
 import top.yeexang.community.utils.JwtUtil;
 
 import javax.servlet.http.Cookie;
@@ -21,13 +23,16 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- * <p>session拦截器，在这里处理JWT认证和登录校验</p>
+ * <p>session拦截器，在这里处理JWT认证、登录校验以及通知接收</p>
  *
  * @author yeeq
  * @date 2020/10/4
  */
 @Service
 public class SessionInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private NotificationSev notificationSev;
 
     @Override
     public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
@@ -51,13 +56,13 @@ public class SessionInterceptor implements HandlerInterceptor {
         Cookie[] cookies = request.getCookies();
         boolean hasToken = false;
         /* JWT 认证 */
+        UserDTO userDTO = null;
         if (cookies != null && cookies.length != 0) {
             for (Cookie cookie : cookies) {
                 if ("token".equals(cookie.getName())) {
                     String token = cookie.getValue();
                     if (token != null) {
                         hasToken = true;
-                        UserDTO userDTO;
                         try {
                             Map<String, Claim> map = JwtUtil.verifyToken(token);
                             userDTO = new UserDTO();
@@ -85,6 +90,12 @@ public class SessionInterceptor implements HandlerInterceptor {
                     throw new CustomizeException(ResponseCodeEnum.NO_LOGIN);
                 }
             }
+        }
+        /* 接收通知 */
+        userDTO = (UserDTO) request.getAttribute("loginUser");
+        if (userDTO != null) {
+            Integer newNotificationCount = notificationSev.getNewNotificationList(userDTO.getId()).size();
+            request.setAttribute("newNotificationCount", newNotificationCount);
         }
         return true;
     }

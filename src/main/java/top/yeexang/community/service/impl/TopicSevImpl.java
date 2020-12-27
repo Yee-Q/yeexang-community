@@ -108,4 +108,9 @@ public class TopicSevImpl implements TopicSev {
         // 删除帖子
         topicDao.deleteTopicById(id);
     }
+
+    @Override
+    public Topic getTopic(Long id) {
+        return topicDao.selectTopicById(id);
+    }
 }

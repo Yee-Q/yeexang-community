@@ -153,7 +153,7 @@ pre{padding: 10px 15px; margin: 10px 0; font-size: 12px; border-left: 6px solid 
 .fly-header .layui-nav .layui-this:after,
 .fly-header .layui-nav .layui-nav-bar,
 .fly-header .fly-nav-user .layui-nav-more{display: none !important;}
-.fly-header .fly-nav-user .layui-nav-child{left: auto; right: 0; width: 120px; min-width: 0;}
+.fly-header .fly-nav-user .layui-nav-child{left: auto; right: 0; width: 140px; min-width: 0;}
 
 /* 底部 */
 .fly-footer {margin: 50px 0 0; padding: 20px 0 30px; line-height: 30px; text-align: center; color: #737573; border-top: 1px solid #e2e2e2;}

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title th:text="${topicDTO.title}"></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="yeexang">
+  <meta name="description" content="yeexang">
+  <link rel="stylesheet" href="/layui/css/layui.css">
+  <link rel="stylesheet" href="/css/global.css">
+</head>
+<body>
+
+<!-- 导航栏 -->
+<div th:insert="~{/common/header :: nav}"></div>
+<!-- 子导航栏 -->
+<div th:insert="~{/common/header :: sub_nav}"></div>
+
+<div class="layui-container">
+  <div class="layui-row layui-col-space15">
+
+    <div class="layui-col-md8 content detail">
+      <!-- 帖子内容 -->
+      <div class="fly-panel detail-box">
+        <!-- 帖子标题 -->
+        <h1 th:text="${topicDTO.title}"></h1>
+        <div class="fly-detail-info">
+          <!-- 加精 or 推荐 -->
+          <span class="layui-badge layui-bg-blue" th:text="${topicDTO.category.categoryName}"></span>
+          <span class="layui-badge layui-bg-black" th:if="${topicDTO.status == 1 || topicDTO.status == 3}">推荐</span>
+          <span class="layui-badge layui-bg-red" th:if="${topicDTO.status == 1 || topicDTO.status == 3}">精帖</span>
+          <!--  标签信息 -->
+          <span class="layui-btn layui-btn-xs" th:each="tag : ${tags}" th:text="${tag}"></span>
+          <!-- 帖子状态 -->
+          <span class="fly-list-nums">
+            <i class="iconfont" title="回复">&#xe60c;</i><span th:text="${topicDTO.commentCount}"></span>
+            <i class="iconfont" title="人气">&#xe60b;</i><span th:text="${topicDTO.viewCount}"></span>
+            <i class="layui-icon layui-icon-praise"></i>   <span th:text="${topicDTO.likeCount}"></span>
+          </span>
+        </div>
+        <!-- 作者信息 -->
+        <div class="detail-about">
+          <a class="fly-avatar">
+            <img th:src="${topicDTO.creator.avatarUrl}">
+          </a>
+          <div class="fly-detail-user">
+            <a class="fly-link">
+              <cite th:text="${topicDTO.creator.name}"></cite>
+              <i class="layui-badge fly-badge-vip" th:if="${topicDTO.creator.vip == true}" th:text="VIP"></i>
+            </a>
+          </div>
+          <div class="detail-hits" id="LAY_jieAdmin">
+            最后一次编辑于: <span th:text="${#dates.format(topicDTO.gmtModified,'yyyy-MM-dd HH:mm')}"></span>
+            <span class="layui-btn layui-btn-xs jie-admin" type="edit" th:if="${loginUser != null &&  loginUser.id == topicDTO.creator.id}">编辑</span>
+            <span id="topic-del" class="layui-btn layui-btn-xs jie-admin" type="del" th:if="${loginUser != null &&  loginUser.id == topicDTO.creator.id}">删除</span>
+          </div>
+        </div>
+        <!-- 描述内容 -->
+        <div class="detail-body photos" th:text="${topicDTO.description}"></div>
+      </div>
+      <!-- 评论内容 -->
+      <div class="fly-panel detail-box" id="flyReply">
+        <!-- 评论列表 -->
+        <ul class="jieda" id="jieda">
+          <!-- 有数据时 -->
+          <li class="jieda-daan" th:if="${commentDTOList.size() != 0}" th:each="commentDTO : ${commentDTOList}">
+            <div th:id="${'comment-' + commentDTO.id}">
+              <!-- 评论者信息 -->
+              <div class="detail-about detail-about-reply">
+                <a class="fly-avatar" href="">
+                  <img th:src="${commentDTO.userDTO.avatarUrl}" alt=" ">
+                </a>
+                <div class="fly-detail-user">
+                  <a href="" class="fly-link">
+                    <cite th:text="${commentDTO.userDTO.name}"></cite>
+                    <i class="layui-badge fly-badge-vip" th:if="${commentDTO.userDTO.vip}"></i>
+                  </a>
+                  <span th:if="${commentDTO.userDTO.id == topicDTO.creator.id}">(楼主)</span>
+                </div>
+                <div class="detail-hits">
+                  最后一次编辑于: <span th:text="${#dates.format(topicDTO.gmtModified,'yyyy-MM-dd HH:mm')}"></span>
+                </div>
+              </div>
+              <!-- 评论内容 -->
+              <div class="detail-body jieda-body photos">
+                <p th:text="${commentDTO.content}"></p>
+              </div>
+              <!-- 评论状态 -->
+              <div class="jieda-reply">
+                <div class="jieda-admin">
+                  <span type="edit" th:if="${loginUser != null && loginUser.id == commentDTO.userDTO.id}">编辑</span>
+                  <span type="del" th:if="${loginUser != null && (loginUser.id == commentDTO.userDTO.id || loginUser.id == topicDTO.creator.id)}">删除</span>
+                  <span type="second-reply" th:text="${'回复(' + commentDTO.commentCount} + ')'" th:data-id="${commentDTO.id}"></span>
+                </div>
+                <!-- 点赞数 -->
+                <span class="jieda-zan" type="zan">
+                  <i class="iconfont icon-zan"></i>
+                  <em th:text="${commentDTO.likeCount}">0</em>
+                </span>
+                <div class="layui-card" style="background-color: #f7f8fa; margin-top: 15px;
+                margin-bottom: 15px; padding-top: 10px; padding-bottom: 10px; display: none" th:id="${'second-reply-' + commentDTO.id}">
+                  <div th:id="${'second-reply-container-' + commentDTO.id}"></div>
+                  <form class="layui-form">
+                    <input name="parentId" type="hidden" th:value="${commentDTO.id}">
+                    <input name="type" type="hidden" value="2">
+                    <div class="layui-card-body">
+                      <textarea id="sub-comment-textarea" name="content" required lay-verify="required" placeholder="请输入内容"  class="layui-textarea fly-editor" style="height: 80px;"></textarea>
+                    </div>
+                    <div class="layui-card-body" style="text-align: right">
+                      <button class="layui-btn layui-btn-sm" lay-filter="second-comment-submit" lay-submit>提交回复</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </li>
+          <!-- 无数据时 -->
+          <li class="fly-none" th:if="${commentDTOList.size() == 0}">消灭零回复</li>
+        </ul>
+        <!-- 写评论 -->
+        <div class="layui-form layui-form-pane">
+          <form>
+            <input name="parentId" type="hidden" th:value="${topicDTO.id}">
+            <input name="type" type="hidden" value="1">
+            <div class="layui-form-item layui-form-text">
+              <div class="layui-input-block">
+                <textarea name="content" required lay-verify="required" placeholder="请输入内容"  class="layui-textarea fly-editor" style="height: 150px;"></textarea>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <button class="layui-btn" lay-filter="comment-submit" lay-submit>提交回复</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- 侧边栏 -->
+    <!--<div class="layui-col-md4">
+      <dl class="fly-panel fly-list-one">
+        <dt class="fly-panel-title">本周热议</dt>
+        <dd>
+          <a href="">基于 layui 的极简社区页面模版</a>
+          <span><i class="iconfont icon-pinglun1"></i> 16</span>
+        </dd>
+        <dd>
+          <a href="">基于 layui 的极简社区页面模版</a>
+          <span><i class="iconfont icon-pinglun1"></i> 16</span>
+        </dd>
+        <dd>
+          <a href="">基于 layui 的极简社区页面模版</a>
+          <span><i class="iconfont icon-pinglun1"></i> 16</span>
+        </dd>
+        <dd>
+          <a href="">基于 layui 的极简社区页面模版</a>
+          <span><i class="iconfont icon-pinglun1"></i> 16</span>
+        </dd>
+        <dd>
+          <a href="">基于 layui 的极简社区页面模版</a>
+          <span><i class="iconfont icon-pinglun1"></i> 16</span>
+        </dd>
+        <dd>
+          <a href="">基于 layui 的极简社区页面模版</a>
+          <span><i class="iconfont icon-pinglun1"></i> 16</span>
+        </dd>
+        <dd>
+          <a href="">基于 layui 的极简社区页面模版</a>
+          <span><i class="iconfont icon-pinglun1"></i> 16</span>
+        </dd>
+        <dd>
+          <a href="">基于 layui 的极简社区页面模版</a>
+          <span><i class="iconfont icon-pinglun1"></i> 16</span>
+        </dd>
+        <dd>
+          <a href="">基于 layui 的极简社区页面模版</a>
+          <span><i class="iconfont icon-pinglun1"></i> 16</span>
+        </dd>
+        <dd>
+          <a href="">基于 layui 的极简社区页面模版</a>
+          <span><i class="iconfont icon-pinglun1"></i> 16</span>
+        </dd>
+
+        &lt;!&ndash; 无数据时 &ndash;&gt;
+        &lt;!&ndash;
+        <div class="fly-none">没有相关数据</div>
+        &ndash;&gt;
+      </dl>
+
+      <div class="fly-panel">
+        <div class="fly-panel-title">
+          这里可作为广告区域
+        </div>
+        <div class="fly-panel-main">
+          <a href="http://layim.layui.com/?from=fly" target="_blank" class="fly-zanzhu" time-limit="2017.09.25-2099.01.01" style="background-color: #5FB878;">LayIM 3.0 - layui 旗舰之作</a>
+        </div>
+      </div>
+
+      <div class="fly-panel" style="padding: 20px 0; text-align: center;">
+        <img src="../../res/images/weixin.jpg" style="max-width: 100%;" alt="layui">
+        <p style="position: relative; color: #666;">微信扫码关注 layui 公众号</p>
+      </div>
+
+    </div>-->
+  </div>
+</div>
+
+<div class="fly-footer">
+  <p><a href="" target="_blank">异想社区</a></p>
+</div>
+
+<script src="/layui/layui.js"></script>
+<script th:inline="javascript">
+
+  layui.use(['jquery', 'form', 'layer', 'element'], function () {
+    var $ = layui.$;
+    var form = layui.form;
+    var layer = layui.layer;
+    var element = layui.element;
+    // 更新子评论
+    $.updateSubComment = function (id) {
+      var $subReplyContainer = $("#second-reply-container-" + id);
+      // 清空子元素
+      $subReplyContainer.children().remove();
+      // 获取子评论
+      $.getJSON("/comment/" + id, function (data) {
+        $.each( data.data, function(index, comment) {
+
+          let $layuiCardHeader = $("<div/>", {
+            "class": "layui-card-header"
+          }).append($("<a/>", {
+            "href": ""
+          }).append($("<img/>", {
+            "src": comment.userDTO.avatarUrl,
+            "style": "width: 32px; height: 32px;"
+          }))).append($("<a/>", {
+            "href": ""
+          }).append($("<span/>", {
+            html: comment.userDTO.name,
+            "style": "margin-left: 5px"
+          })));
+
+          if (comment.userDTO.vip === true) {
+            $layuiCardHeader.append($("<i/>", {
+              "class": "layui-badge fly-badge-vip",
+              html: VIP
+            }));
+          }
+
+          let $layuiCardBody = $("<div/>", {
+            "class": "layui-card-body",
+            html : comment.content
+          });
+          console.log($layuiCardHeader.html());
+          console.log("--------------------------------------------------")
+          $subReplyContainer.append($layuiCardHeader);
+          console.log($layuiCardBody.html());
+          console.log("--------------------------------------------------")
+          $subReplyContainer.append($layuiCardBody);
+          console.log($subReplyContainer.html());
+          console.log("**************************************************")
+        });
+      });
+    };
+    $("#topic-del").click(function () {
+      layer.confirm('您确定要删除该帖子吗？', {
+        btn: ['确定','取消']
+      }, function(){
+        $.get('/topic/del/' + [[${topicDTO.id}]], function (result) {
+          if (result.code === 2000) {
+            $(location).attr('href', '/');
+          } else {
+            layer.msg('删除失败，请稍后再试！');
+          }
+        });
+      }, function(){
+
+      });
+    });
+    // 展开收起二级评论
+    $('[type = second-reply]').click(function () {
+      let id = $(this).attr("data-id");
+      var $subReply = $("#second-reply-" + id);
+      if($subReply.children(':first').children().length !== 0) {
+        // 已经有子评论，直接展示
+        $subReply.toggle();
+      } else {
+        $.updateSubComment(id);
+        $subReply.toggle();
+      }
+    });
+    form.on('submit(comment-submit)', function (data) {
+      var jsonData = JSON.stringify(data.field);
+      $.ajax({
+        type: "post",
+        url: "/comment",
+        async: true,
+        contentType: 'application/json',
+        dataType: 'JSON',
+        data: jsonData,
+        success: function (res) {
+          if (res.code === 4006) {
+            layer.msg(res.data);
+          } else {
+            location.reload();
+          }
+        }
+      });
+      return false;
+    });
+    form.on('submit(second-comment-submit)', function (data) {
+      var jsonData = JSON.stringify(data.field);
+      $.ajax({
+        type: "post",
+        url: "/comment/",
+        async: true,
+        contentType: 'application/json',
+        dataType: 'JSON',
+        data: jsonData,
+        success: function (res) {
+          if (res.code === 4006) {
+            layer.msg(res.data);
+          } else {
+            let json = $.parseJSON(jsonData);
+            $.updateSubComment(json["parentId"]);
+            $('#sub-comment-textarea').val('');
+          }
+        }
+      });
+      return false;
+    });
+  });
+</script>
+
+</body>
+</html>
